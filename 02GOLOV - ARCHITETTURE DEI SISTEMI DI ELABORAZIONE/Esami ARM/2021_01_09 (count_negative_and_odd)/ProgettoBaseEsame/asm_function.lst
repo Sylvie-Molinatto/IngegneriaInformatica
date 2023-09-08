@@ -1,0 +1,142 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000        0 
+                       VETT    RN               0
+    2 00000000        1 
+                       N       RN               1
+    3 00000000        2 
+                       offset  RN               2
+    4 00000000        3 
+                       size    RN               3
+    5 00000000        4 
+                       value   RN               4
+    6 00000000        5 
+                       counter RN               5
+    7 00000000        6 
+                       pointer RN               6
+    8 00000000                 AREA             asm_function, CODE, READONLY
+    9 00000000                 EXPORT           count_negative_and_odd
+   10 00000000         
+   11 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+   12 00000000 46EC    count_negative_and_odd
+                               MOV              r12, sp
+   13 00000002         ; save volatile registers
+   14 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+   15 00000006 F04F 0200       MOV              offset, #0
+   16 0000000A F04F 0304       MOV              size, #4
+   17 0000000E FB03 F101       MUL              N, size, N
+   18 00000012 F04F 0500       MOV              counter, #0
+   19 00000016 F04F 0600       MOV              pointer, #0
+   20 0000001A F04F 0801       MOV              r8, #1
+   21 0000001E         
+   22 0000001E 5884    ciclo   LDR              value, [VETT, offset]
+   23 00000020 1E24            SUBS             value, value, #0
+   24 00000022 D503            bpl              controllo
+   25 00000024 EA18 0F04       TST              r8, value
+   26 00000028 BF18 1C6D       ADDNE            counter, counter, #1
+   27 0000002C         ;b controllo
+   28 0000002C         ;lsl r7, value, #28
+   29 0000002C         ;lsr r7, r7, #28
+   30 0000002C         ;cmp r7, #0x01
+   31 0000002C         ;addeq counter, counter, #1
+   32 0000002C         ;beq controllo
+   33 0000002C         ;cmp r7, #0x03
+   34 0000002C         ;addeq counter, counter, #1
+   35 0000002C         ;beq controllo
+   36 0000002C         ;cmp r7, #0x05
+   37 0000002C         ;addeq counter, counter, #1
+   38 0000002C         ;beq controllo
+   39 0000002C         ;cmp r7, #0x07
+   40 0000002C         ;addeq counter, counter, #1
+   41 0000002C         ;beq controllo
+   42 0000002C         ;cmp r7, #0x09
+   43 0000002C         ;addeq counter, counter, #1
+   44 0000002C         ;beq controllo
+   45 0000002C         ;cmp r7, #0x0B
+   46 0000002C         ;addeq counter, counter, #1
+   47 0000002C         ;beq controllo
+   48 0000002C         ;cmp r7, #0x0D
+   49 0000002C         ;addeq counter, counter, #1
+   50 0000002C         ;cmp r7, #0x0F
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   51 0000002C         ;addeq counter, counter, #1
+   52 0000002C         ;b controllo
+   53 0000002C         
+   54 0000002C         
+   55 0000002C 441A    controllo
+                               add              offset, offset, size
+   56 0000002E 428A            cmp              offset, N
+   57 00000030 DDF5            ble              ciclo
+   58 00000032         
+   59 00000032         
+   60 00000032         
+   61 00000032 4628    fine    MOV              R0, counter
+   62 00000034         ; restore volatile registers
+   63 00000034 E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   64 00000038         
+   65 00000038                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_function.d -o.\asm_function.o -I.\RTE\_Target_1 -IC:\Users\A
+SUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\
+AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EV
+AL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" 
+--predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_functio
+n.lst asm_function.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_function 00000000
+
+Symbol: asm_function
+   Definitions
+      At line 8 in file asm_function.s
+   Uses
+      None
+Comment: asm_function unused
+ciclo 0000001E
+
+Symbol: ciclo
+   Definitions
+      At line 22 in file asm_function.s
+   Uses
+      At line 57 in file asm_function.s
+Comment: ciclo used once
+controllo 0000002C
+
+Symbol: controllo
+   Definitions
+      At line 55 in file asm_function.s
+   Uses
+      At line 24 in file asm_function.s
+Comment: controllo used once
+count_negative_and_odd 00000000
+
+Symbol: count_negative_and_odd
+   Definitions
+      At line 12 in file asm_function.s
+   Uses
+      At line 9 in file asm_function.s
+Comment: count_negative_and_odd used once
+fine 00000032
+
+Symbol: fine
+   Definitions
+      At line 61 in file asm_function.s
+   Uses
+      None
+Comment: fine unused
+5 symbols
+346 symbols in table

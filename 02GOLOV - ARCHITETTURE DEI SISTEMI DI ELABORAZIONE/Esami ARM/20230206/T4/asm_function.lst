@@ -1,0 +1,106 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000                 AREA             asm_function, CODE, READONLY
+    3 00000000                 EXPORT           media_e_superiori_alla_media
+    4 00000000         
+    5 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+    6 00000000 46EC    media_e_superiori_alla_media
+                               MOV              r12, sp
+    7 00000002         ; save volatile registers
+    8 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+    9 00000006         
+   10 00000006         ;R0 VETT
+   11 00000006         ;R1 posizione
+   12 00000006         ;R2 super
+   13 00000006         
+   14 00000006 F04F 0300       MOV              R3, #0      ;indice i
+   15 0000000A F04F 0500       MOV              R5, #0
+   16 0000000E         
+   17 0000000E 5CC4    loop_media
+                               LDRB             R4, [R0, R3]
+   18 00000010 4425            ADD              R5, R5, R4
+   19 00000012 F103 0301       ADD              R3, R3, #1
+   20 00000016 428B            CMP              R3, R1
+   21 00000018 D3F9            BLO              loop_media
+   22 0000001A         
+   23 0000001A FBB5 F5F3       UDIV             R5, R5, R3  ; media
+   24 0000001E F04F 0300       MOV              R3, #0
+   25 00000022 F04F 0600       MOV              R6, #0
+   26 00000026         
+   27 00000026 5CC4    loop_sup_media
+                               LDRB             R4, [R0, R3]
+   28 00000028 42AC            CMP              R4, R5
+   29 0000002A BFC8 1C76       ADDGT            R6, R6, #1
+   30 0000002E F103 0301       ADD              R3, R3, #1
+   31 00000032 428B            CMP              R3, R1
+   32 00000034 D3F7            BLO              loop_sup_media
+   33 00000036         
+   34 00000036 4628            MOV              R0, R5
+   35 00000038 7016            STRB             R6, [R2]
+   36 0000003A         
+   37 0000003A         ; restore volatile registers
+   38 0000003A E8BD 8DF0 
+                       fine    LDMFD            sp!,{r4-r8,r10-r11,pc}
+   39 0000003E         
+   40 0000003E                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_function.d -o.\asm_function.o -I.\RTE\_Target_1 -IC:\Users\A
+SUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\
+AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EV
+AL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" 
+--predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_functio
+n.lst asm_function.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_function 00000000
+
+Symbol: asm_function
+   Definitions
+      At line 2 in file asm_function.s
+   Uses
+      None
+Comment: asm_function unused
+fine 0000003A
+
+Symbol: fine
+   Definitions
+      At line 38 in file asm_function.s
+   Uses
+      None
+Comment: fine unused
+loop_media 0000000E
+
+Symbol: loop_media
+   Definitions
+      At line 17 in file asm_function.s
+   Uses
+      At line 21 in file asm_function.s
+Comment: loop_media used once
+loop_sup_media 00000026
+
+Symbol: loop_sup_media
+   Definitions
+      At line 27 in file asm_function.s
+   Uses
+      At line 32 in file asm_function.s
+Comment: loop_sup_media used once
+media_e_superiori_alla_media 00000000
+
+Symbol: media_e_superiori_alla_media
+   Definitions
+      At line 6 in file asm_function.s
+   Uses
+      At line 3 in file asm_function.s
+Comment: media_e_superiori_alla_media used once
+5 symbols
+339 symbols in table

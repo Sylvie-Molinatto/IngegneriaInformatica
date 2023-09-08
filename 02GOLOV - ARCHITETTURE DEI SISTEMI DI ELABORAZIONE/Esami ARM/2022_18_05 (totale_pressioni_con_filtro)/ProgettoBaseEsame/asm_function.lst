@@ -1,0 +1,98 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000                 AREA             asm_function, CODE, READONLY
+    3 00000000                 EXPORT           totale_pressioni_con_filtro
+    4 00000000         
+    5 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+    6 00000000 46EC    totale_pressioni_con_filtro
+                               MOV              r12, sp
+    7 00000002         ; save volatile registers
+    8 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+    9 00000006         
+   10 00000006         ; R0 VETT[]
+   11 00000006         ; R1 posizione
+   12 00000006         ; R2 MAX
+   13 00000006         ; R3 MIN
+   14 00000006         
+   15 00000006 F04F 0400       MOV              R4, #0      ; contatore
+   16 0000000A F04F 0600       MOV              R6, #0      ; risultato
+   17 0000000E         
+   18 0000000E 5D05    ciclo   LDRB             R5, [R0, R4]
+   19 00000010 4295            CMP              R5, R2
+   20 00000012 DC02            BGT              next
+   21 00000014 429D            CMP              R5, R3
+   22 00000016 DB00            BLT              next
+   23 00000018 442E            ADD              R6, R6, R5
+   24 0000001A         
+   25 0000001A F104 0401 
+                       next    ADD              R4, R4, #1
+   26 0000001E 428C            CMP              R4, R1
+   27 00000020 DBF5            BLT              ciclo
+   28 00000022         
+   29 00000022         ; restore volatile registers
+   30 00000022 4630    fine    MOV              R0, R6
+   31 00000024 E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   32 00000028         
+   33 00000028                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_function.d -o.\asm_function.o -I.\RTE\_Target_1 -IC:\Users\A
+SUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\
+AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EV
+AL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" 
+--predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_functio
+n.lst asm_function.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_function 00000000
+
+Symbol: asm_function
+   Definitions
+      At line 2 in file asm_function.s
+   Uses
+      None
+Comment: asm_function unused
+ciclo 0000000E
+
+Symbol: ciclo
+   Definitions
+      At line 18 in file asm_function.s
+   Uses
+      At line 27 in file asm_function.s
+Comment: ciclo used once
+fine 00000022
+
+Symbol: fine
+   Definitions
+      At line 30 in file asm_function.s
+   Uses
+      None
+Comment: fine unused
+next 0000001A
+
+Symbol: next
+   Definitions
+      At line 25 in file asm_function.s
+   Uses
+      At line 20 in file asm_function.s
+      At line 22 in file asm_function.s
+
+totale_pressioni_con_filtro 00000000
+
+Symbol: totale_pressioni_con_filtro
+   Definitions
+      At line 6 in file asm_function.s
+   Uses
+      At line 3 in file asm_function.s
+Comment: totale_pressioni_con_filtro used once
+5 symbols
+339 symbols in table

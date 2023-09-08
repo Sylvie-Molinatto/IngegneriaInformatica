@@ -1,0 +1,127 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000         
+    3 00000000                 AREA             asm_functions, CODE, READONLY
+    4 00000000                 EXPORT           find_best_3
+    5 00000000                 EXPORT           DATA_IN
+    6 00000000         find_best_3                          ;DATA_IN[], int n, 
+                                                            char BEST_3[]
+    7 00000000         ; save current SP for a faster access 
+    8 00000000         ; to parameters in the stack
+    9 00000000 46EC            MOV              r12, sp
+   10 00000002         ; save volatile registers
+   11 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+   12 00000006         ; extract argument 4 and 5 into R4 and R5
+   13 00000006 F910 3B01       LDRSB            r3,[r0],#1
+   14 0000000A 7013            STRB             r3,[r2]
+   15 0000000C F910 3B01       LDRSB            r3,[r0],#1
+   16 00000010 7053            STRB             r3,[r2,#1]
+   17 00000012 F910 3B01       LDRSB            r3,[r0],#1
+   18 00000016 7093            STRB             r3,[r2,#2]
+   19 00000018 4689            MOV              r9,r1
+   20 0000001A F1A1 0103       SUB              r1,r1,#3
+   21 0000001E F910 3B01 
+                       loop1   LDRSB            r3,[r0],#1
+   22 00000022 F04F 0500       MOV              r5,#0
+   23 00000026 461E            MOV              r6,r3
+   24 00000028 F04F 38FF       MOV              r8, #-1
+   25 0000002C 5754    loop2   LDRSB            r4,[r2,r5]
+   26 0000002E 42B4            CMP              r4,r6
+   27 00000030 BFBC 4626       MOVLT            r6,r4       ;metti il minimo in
+                                                             r6
+   28 00000034 46A8            MOVLT            r8,r5       ;indice val minore 
+                                                            nel vettore
+   29 00000036 F105 0501       ADD              r5,r5,#1
+   30 0000003A 2D03            CMP              r5,#3
+   31 0000003C D1F6            BNE              loop2
+   32 0000003E F1B8 3FFF       CMP              r8,#-1
+   33 00000042 BF18 F842 
+              3008             STRNE            r3,[r2,r8]
+   34 00000048 1E49            SUBS             r1,r1,#1
+   35 0000004A D1E8            BNE              loop1
+   36 0000004C         
+   37 0000004C         ; setup a value for R0 to return
+   38 0000004C 4648            MOV              r0, r9
+   39 0000004E         ; restore volatile registers
+   40 0000004E E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   41 00000052         
+   42 00000052                 AREA             |.data|, DATA, READONLY
+   43 00000000 FE 05 F6 
+              14       DATA_IN DCB              -2,5,-10,20
+   44 00000004         
+   45 00000004                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_funct.d -o.\asm_funct.o -I.\RTE\_Target_1 -IC:\Users\ASUS\Ap
+pData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\AppDat
+a\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EVAL SET
+A 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" --pred
+efine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_funct.lst ASM
+_funct.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_functions 00000000
+
+Symbol: asm_functions
+   Definitions
+      At line 3 in file ASM_funct.s
+   Uses
+      None
+Comment: asm_functions unused
+find_best_3 00000000
+
+Symbol: find_best_3
+   Definitions
+      At line 6 in file ASM_funct.s
+   Uses
+      At line 4 in file ASM_funct.s
+Comment: find_best_3 used once
+loop1 0000001E
+
+Symbol: loop1
+   Definitions
+      At line 21 in file ASM_funct.s
+   Uses
+      At line 35 in file ASM_funct.s
+Comment: loop1 used once
+loop2 0000002C
+
+Symbol: loop2
+   Definitions
+      At line 25 in file ASM_funct.s
+   Uses
+      At line 31 in file ASM_funct.s
+Comment: loop2 used once
+4 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.data 00000000
+
+Symbol: .data
+   Definitions
+      At line 42 in file ASM_funct.s
+   Uses
+      None
+Comment: .data unused
+DATA_IN 00000000
+
+Symbol: DATA_IN
+   Definitions
+      At line 43 in file ASM_funct.s
+   Uses
+      At line 5 in file ASM_funct.s
+Comment: DATA_IN used once
+2 symbols
+340 symbols in table

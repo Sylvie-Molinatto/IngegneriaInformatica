@@ -1,0 +1,88 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000        8 
+                       PS      RN               8
+    2 00000000        9 
+                       PI      RN               9
+    3 00000000        A 
+                       PN      RN               10
+    4 00000000         
+    5 00000000         
+    6 00000000                 AREA             asm_function, CODE, READONLY
+    7 00000000                 EXPORT           stat_satisfaction
+    8 00000000         
+    9 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+   10 00000000 46EC    stat_satisfaction
+                               MOV              r12, sp
+   11 00000002         ; save volatile registers
+   12 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+   13 00000006         ; R0 Soddisfatti, R1 Neutri, R2 Insoddisfatti
+   14 00000006         
+   15 00000006 F8DC 4000       LDR              R4, [r12]
+   16 0000000A F8DC 5004       LDR              R5, [R12, #4]
+   17 0000000E F04F 0B64       MOV              R11, #100
+   18 00000012         
+   19 00000012 EB00 0701       ADD              R7, R0, R1
+   20 00000016 4417            ADD              R7, R7, R2
+   21 00000018         
+   22 00000018 FB00 F80B       MUL              PS, R0, R11
+   23 0000001C FBB8 F8F7       UDIV             PS, PS, R7
+   24 00000020 F883 8000       STRB             PS, [R3]
+   25 00000024         
+   26 00000024 FB01 FA0B       MUL              PN, R1, R11
+   27 00000028 FBBA FAF7       UDIV             PN, PN, R7
+   28 0000002C F8C4 A000       STR              PN, [R4]
+   29 00000030         
+   30 00000030 FB02 F90B       MUL              PI, R2, R11
+   31 00000034 FBB9 F9F7       UDIV             PI, PI, R7
+   32 00000038 F8C5 9000       STR              PI, [R5]
+   33 0000003C         
+   34 0000003C         ; restore volatile registers
+   35 0000003C 4638    fine    MOV              R0, R7
+   36 0000003E E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   37 00000042         
+   38 00000042                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_function.d -o.\asm_function.o -I.\RTE\_Target_1 -IC:\Users\A
+SUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\
+AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EV
+AL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" 
+--predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_functio
+n.lst asm_function.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_function 00000000
+
+Symbol: asm_function
+   Definitions
+      At line 6 in file asm_function.s
+   Uses
+      None
+Comment: asm_function unused
+fine 0000003C
+
+Symbol: fine
+   Definitions
+      At line 35 in file asm_function.s
+   Uses
+      None
+Comment: fine unused
+stat_satisfaction 00000000
+
+Symbol: stat_satisfaction
+   Definitions
+      At line 10 in file asm_function.s
+   Uses
+      At line 7 in file asm_function.s
+Comment: stat_satisfaction used once
+3 symbols
+340 symbols in table

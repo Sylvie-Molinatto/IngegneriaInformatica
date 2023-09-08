@@ -1,0 +1,90 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             max, CODE, READONLY
+    2 00000000                 EXPORT           find_max
+    3 00000000         
+    4 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+    5 00000000 46EC            MOV              r12, sp
+    6 00000002         ; save volatile registers
+    7 00000002 E92D 4DF0 
+                       find_max
+                               STMFD            sp!,{r4-r8,r10-r11,lr}
+    8 00000006         
+    9 00000006         ; R0 VETT[]
+   10 00000006         ; R1 N
+   11 00000006         ; R2 pos_max
+   12 00000006         ; R4 MAX
+   13 00000006         ; R5 POS
+   14 00000006         
+   15 00000006 F04F 0300       MOV              R3, #0      ; posizione
+   16 0000000A F04F 0400       MOV              R4, #0      ; MAX
+   17 0000000E F04F 0500       MOV              R5, #0      ; POS
+   18 00000012         
+   19 00000012 F850 6023 
+                       loop    LDR              R6, [R0, R3, LSL#2]
+   20 00000016 42A6            CMP              R6, R4
+   21 00000018 BFC4 4634       MOVGT            R4, R6
+   22 0000001C 461D            MOVGT            R5, R3
+   23 0000001E F103 0301       ADD              R3, R3, #1
+   24 00000022 428B            CMP              R3, R1
+   25 00000024 D3F5            BLO              loop
+   26 00000026         
+   27 00000026         
+   28 00000026 6015            STR              R5, [R2]
+   29 00000028         
+   30 00000028 4620    fine    MOV              R0, R4
+   31 0000002A         ; restore volatile registers      
+   32 0000002A E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   33 0000002E                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\find_max.d -o.\find_max.o -I.\RTE\_Target_1 -IC:\Users\ASUS\AppD
+ata\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\AppData\
+Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EVAL SETA 
+1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" --predef
+ine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\find_max.lst find_m
+ax.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+find_max 00000002
+
+Symbol: find_max
+   Definitions
+      At line 7 in file find_max.s
+   Uses
+      At line 2 in file find_max.s
+Comment: find_max used once
+fine 00000028
+
+Symbol: fine
+   Definitions
+      At line 30 in file find_max.s
+   Uses
+      None
+Comment: fine unused
+loop 00000012
+
+Symbol: loop
+   Definitions
+      At line 19 in file find_max.s
+   Uses
+      At line 25 in file find_max.s
+Comment: loop used once
+max 00000000
+
+Symbol: max
+   Definitions
+      At line 1 in file find_max.s
+   Uses
+      None
+Comment: max unused
+4 symbols
+338 symbols in table

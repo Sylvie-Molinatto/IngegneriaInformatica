@@ -1,0 +1,129 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             myData, DATA, READONLY
+    2 00000000 00000001 
+              00000002 
+              00000003 pool    DCD              0x01, 0x02, 0x03
+    3 0000000C         
+    4 0000000C                 AREA             asm_function, CODE, READONLY
+    5 00000000                 EXPORT           search_in_pool
+    6 00000000         
+    7 00000000 00000003 
+                       ELEMENTS
+                               EQU              3
+    8 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+    9 00000000 46EC    search_in_pool
+                               MOV              r12, sp
+   10 00000002         ; save volatile registers
+   11 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+   12 00000006         
+   13 00000006 4909            LDR              r1, =pool
+   14 00000008 F04F 0400       MOV              r4, #0      ; i
+   15 0000000C F04F 35FF       MOV              R5, #-1
+   16 00000010         
+   17 00000010 F851 2024 
+                       ciclo   LDR              r2, [r1, r4, lsl #2]
+   18 00000014 4290            cmp              r0,r2
+   19 00000016 F104 0401       add              r4, r4, #1
+   20 0000001A BF08 4625       moveq            r5, r4
+   21 0000001E 2C03            cmp              r4, #ELEMENTS
+   22 00000020 D000            beq              fine
+   23 00000022 E7F5            b                ciclo
+   24 00000024         
+   25 00000024         
+   26 00000024         ; restore volatile registers
+   27 00000024 4628    fine    MOV              R0, R5
+   28 00000026 E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   29 0000002A         
+   30 0000002A                 END
+              00 00 00000000 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_function.d -o.\asm_function.o -I.\RTE\_Target_1 -IC:\Users\A
+SUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\
+AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EV
+AL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" 
+--predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_functio
+n.lst asm_function.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+myData 00000000
+
+Symbol: myData
+   Definitions
+      At line 1 in file asm_function.s
+   Uses
+      None
+Comment: myData unused
+pool 00000000
+
+Symbol: pool
+   Definitions
+      At line 2 in file asm_function.s
+   Uses
+      At line 13 in file asm_function.s
+Comment: pool used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_function 00000000
+
+Symbol: asm_function
+   Definitions
+      At line 4 in file asm_function.s
+   Uses
+      None
+Comment: asm_function unused
+ciclo 00000010
+
+Symbol: ciclo
+   Definitions
+      At line 17 in file asm_function.s
+   Uses
+      At line 23 in file asm_function.s
+Comment: ciclo used once
+fine 00000024
+
+Symbol: fine
+   Definitions
+      At line 27 in file asm_function.s
+   Uses
+      At line 22 in file asm_function.s
+Comment: fine used once
+search_in_pool 00000000
+
+Symbol: search_in_pool
+   Definitions
+      At line 9 in file asm_function.s
+   Uses
+      At line 5 in file asm_function.s
+Comment: search_in_pool used once
+4 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+ELEMENTS 00000003
+
+Symbol: ELEMENTS
+   Definitions
+      At line 7 in file asm_function.s
+   Uses
+      At line 21 in file asm_function.s
+Comment: ELEMENTS used once
+1 symbol
+343 symbols in table

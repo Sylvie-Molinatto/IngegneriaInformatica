@@ -1,0 +1,139 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000                 AREA             asm_function, CODE, READONLY
+    3 00000000                 EXPORT           average_reference
+    4 00000000         
+    5 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+    6 00000000 46EC    average_reference
+                               MOV              r12, sp
+    7 00000002         ; save volatile registers
+    8 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+    9 00000006         
+   10 00000006         ; R0 MAT
+   11 00000006         ; R1 num
+   12 00000006         ; R2 LEFT/RIGHT
+   13 00000006 F04F 0300       MOV              R3, #0      ; contatore
+   14 0000000A F04F 0400       MOV              R4, #0      ; somma
+   15 0000000E F04F 0500       MOV              R5, #0      ; media
+   16 00000012         
+   17 00000012         
+   18 00000012 F850 6023 
+                       avg     LDR              R6,[R0,R3,LSL #2] ; R& = Curren
+                                                            t Element Value
+   19 00000016 4434            ADD              R4, R4, R6
+   20 00000018 F103 0301       ADD              R3, R3, #1
+   21 0000001C 428B            CMP              R3, R1
+   22 0000001E D1F8            BNE              avg
+   23 00000020 FBB4 F5F1       UDIV             R5, R4, R1
+   24 00000024         
+   25 00000024         
+   26 00000024 F04F 0300       MOV              R3, #0
+   27 00000028 F04F 0400       MOV              R4, #0
+   28 0000002C 2A00            CMP              R2, #0
+   29 0000002E D009            BEQ              left
+   30 00000030         
+   31 00000030         ; R5 media
+   32 00000030         ; R4 cont
+   33 00000030         
+   34 00000030 F850 6023 
+                       right   LDR              R6,[R0,R3,LSL #2] ; R& = Curren
+                                                            t Element Value
+   35 00000034 42AE            CMP              r6, r5
+   36 00000036 BFD8 1C64       ADDLE            r4, r4, #1
+   37 0000003A F103 0301       ADD              R3, R3, #1
+   38 0000003E 428B            CMP              R3, R1
+   39 00000040 D1F6            BNE              right
+   40 00000042 E008            B                fine
+   41 00000044         
+   42 00000044         
+   43 00000044 F850 6023 
+                       left    LDR              R6,[R0,R3,LSL #2] ; R& = Curren
+                                                            t Element Value
+   44 00000048 42AE            CMP              r6, r5
+   45 0000004A BFA8 1C64       ADDGE            r4, r4, #1
+   46 0000004E F103 0301       ADD              R3, R3, #1
+   47 00000052 428B            CMP              R3, R1
+   48 00000054 D1F6            BNE              left
+   49 00000056         
+   50 00000056         
+   51 00000056         ; restore volatile registers
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   52 00000056 4620    fine    MOV              R0, R4
+   53 00000058 E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   54 0000005C         
+   55 0000005C                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_function.d -o.\asm_function.o -I.\RTE\_Target_1 -IC:\Users\A
+SUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\
+AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EV
+AL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" 
+--predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_functio
+n.lst asm_function.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_function 00000000
+
+Symbol: asm_function
+   Definitions
+      At line 2 in file asm_function.s
+   Uses
+      None
+Comment: asm_function unused
+average_reference 00000000
+
+Symbol: average_reference
+   Definitions
+      At line 6 in file asm_function.s
+   Uses
+      At line 3 in file asm_function.s
+Comment: average_reference used once
+avg 00000012
+
+Symbol: avg
+   Definitions
+      At line 18 in file asm_function.s
+   Uses
+      At line 22 in file asm_function.s
+Comment: avg used once
+fine 00000056
+
+Symbol: fine
+   Definitions
+      At line 52 in file asm_function.s
+   Uses
+      At line 40 in file asm_function.s
+Comment: fine used once
+left 00000044
+
+Symbol: left
+   Definitions
+      At line 43 in file asm_function.s
+   Uses
+      At line 29 in file asm_function.s
+      At line 48 in file asm_function.s
+
+right 00000030
+
+Symbol: right
+   Definitions
+      At line 34 in file asm_function.s
+   Uses
+      At line 39 in file asm_function.s
+Comment: right used once
+6 symbols
+340 symbols in table

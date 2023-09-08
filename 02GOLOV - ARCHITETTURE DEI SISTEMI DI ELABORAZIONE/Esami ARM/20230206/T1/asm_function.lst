@@ -1,0 +1,92 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000                 AREA             asm_function, CODE, READONLY
+    3 00000000                 EXPORT           calcola_somma_prodotto
+    4 00000000         
+    5 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+    6 00000000 46EC    calcola_somma_prodotto
+                               MOV              r12, sp
+    7 00000002         ; save volatile registers
+    8 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+    9 00000006         
+   10 00000006         ; R0 VETT
+   11 00000006         ; R1 posizione
+   12 00000006         ; R2 alarm
+   13 00000006         
+   14 00000006 F04F 0300       MOV              R3, #0      ;i
+   15 0000000A F04F 0800       MOV              R8, #0      ; result
+   16 0000000E         
+   17 0000000E F103 0401 
+                       ciclo   ADD              R4, R3, #1
+   18 00000012 428C            CMP              R4, R1
+   19 00000014 DA09            BGE              fine
+   20 00000016 F850 5023       LDR              R5, [R0, R3, LSL#2]
+   21 0000001A F850 6024       LDR              R6, [R0, R4, LSL#2]
+   22 0000001E FB05 F706       MUL              R7, R5, R6
+   23 00000022 44B8            ADD              R8, R8, R7
+   24 00000024 F103 0302       ADD              R3, R3, #2
+   25 00000028 E7F1            B                ciclo
+   26 0000002A         
+   27 0000002A         ; restore volatile registers
+   28 0000002A 4640    fine    MOV              R0, R8
+   29 0000002C F1B8 0FFF       CMP              R8, #255
+   30 00000030 BF38 F04F 
+              39FF             MOVLO            R9, #-1
+   31 00000036 BFA8 F04F 
+              0901             MOVGE            R9, #1
+   32 0000003C F8C2 9000       STR              R9, [R2]
+   33 00000040 E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   34 00000044                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_function.d -o.\asm_function.o -I.\RTE\_Target_1 -IC:\Users\A
+SUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\
+AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EV
+AL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" 
+--predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_functio
+n.lst asm_function.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_function 00000000
+
+Symbol: asm_function
+   Definitions
+      At line 2 in file asm_function.s
+   Uses
+      None
+Comment: asm_function unused
+calcola_somma_prodotto 00000000
+
+Symbol: calcola_somma_prodotto
+   Definitions
+      At line 6 in file asm_function.s
+   Uses
+      At line 3 in file asm_function.s
+Comment: calcola_somma_prodotto used once
+ciclo 0000000E
+
+Symbol: ciclo
+   Definitions
+      At line 17 in file asm_function.s
+   Uses
+      At line 25 in file asm_function.s
+Comment: ciclo used once
+fine 0000002A
+
+Symbol: fine
+   Definitions
+      At line 28 in file asm_function.s
+   Uses
+      At line 19 in file asm_function.s
+Comment: fine used once
+4 symbols
+338 symbols in table

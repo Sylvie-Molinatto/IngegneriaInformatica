@@ -1,0 +1,98 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             ASM_functions, CODE, READONLY
+    2 00000000                 EXPORT           differenza_media_positivi_negat
+ivi
+    3 00000000         
+    4 00000000         differenza_media_positivi_negativi
+                               PROC
+    5 00000000         
+    6 00000000         ; save volatile registers
+    7 00000000 E92D 4DF0       STMFD            SP!,{R4-R8,R10-R11,LR}
+    8 00000004         
+    9 00000004 F04F 0400       MOV              R4, #0      ; somma positivi
+   10 00000008 F04F 0500       MOV              R5, #0      ; somma negativi
+   11 0000000C 4689            MOV              R9, R1      ; indice
+   12 0000000E F04F 0AFF       MOV              R10, #0xFF
+   13 00000012         loop
+   14 00000012 6806            LDR              R6, [R0]
+   15 00000014 2E00            CMP              R6, #0
+   16 00000016 D501            BPL              pos
+   17 00000018 19AD            ADDS             R5, R5, R6
+   18 0000001A E000            B                next
+   19 0000001C         pos
+   20 0000001C 19A4            ADDS             R4, R4, R6
+   21 0000001E         next
+   22 0000001E BF68 F8C2 
+              A000             STRVS            R10, [R2]
+   23 00000024 F100 0004       ADD              R0, R0, #4
+   24 00000028 F1B9 0901       SUBS             R9, R9, #1
+   25 0000002C D1F1            BNE              loop
+   26 0000002E         
+   27 0000002E FB94 F4F1       SDIV             R4, R4, R1
+   28 00000032 FB95 F5F1       SDIV             R5, R5, R1
+   29 00000036 EBA4 0005       SUB              R0, R4, R5
+   30 0000003A         
+   31 0000003A         ; restore volatile registers
+   32 0000003A E8BD 8DF0       LDMFD            SP!,{R4-R8,R10-R11,PC}
+   33 0000003E         
+   34 0000003E                 ENDP
+   35 0000003E                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_funct.d -o.\asm_funct.o -I.\RTE\_Target_1 -IC:\Users\eurex\A
+ppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\eurex\AppD
+ata\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__UVISIO
+N_VERSION SETA 537" --predefine="_RTE_ SETA 1" --predefine="LPC175x_6x SETA 1" 
+--predefine="_RTE_ SETA 1" --list=.\asm_funct.lst asm_funct.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+ASM_functions 00000000
+
+Symbol: ASM_functions
+   Definitions
+      At line 1 in file asm_funct.s
+   Uses
+      None
+Comment: ASM_functions unused
+differenza_media_positivi_negativi 00000000
+
+Symbol: differenza_media_positivi_negativi
+   Definitions
+      At line 4 in file asm_funct.s
+   Uses
+      At line 2 in file asm_funct.s
+Comment: differenza_media_positivi_negativi used once
+loop 00000012
+
+Symbol: loop
+   Definitions
+      At line 13 in file asm_funct.s
+   Uses
+      At line 25 in file asm_funct.s
+Comment: loop used once
+next 0000001E
+
+Symbol: next
+   Definitions
+      At line 21 in file asm_funct.s
+   Uses
+      At line 18 in file asm_funct.s
+Comment: next used once
+pos 0000001C
+
+Symbol: pos
+   Definitions
+      At line 19 in file asm_funct.s
+   Uses
+      At line 16 in file asm_funct.s
+Comment: pos used once
+5 symbols
+338 symbols in table

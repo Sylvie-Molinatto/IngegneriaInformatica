@@ -1,0 +1,107 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             ASM_functions, CODE, READONLY
+    2 00000000                 EXPORT           differenza_media_positivi_negat
+ivi
+    3 00000000         
+    4 00000000         differenza_media_positivi_negativi
+                               PROC
+    5 00000000         ; save current SP for a faster access 
+    6 00000000         ; to parameters in the stack
+    7 00000000 46EC            MOV              r12, sp
+    8 00000002         ; save volatile registers
+    9 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+   10 00000006         
+   11 00000006 F04F 0500       MOV              r5, #0      ;valori positivi
+   12 0000000A F04F 0600       MOV              r6, #0      ;valori negativi
+   13 0000000E F04F 07FF       MOV              r7, #0xFF
+   14 00000012 F04F 0800       MOV              r8, #0      ;numero positivi
+   15 00000016 F04F 0900       MOV              r9, #0      ;numero negativi
+   16 0000001A         
+   17 0000001A         ciclo
+   18 0000001A 6804            LDR              r4, [r0]
+   19 0000001C 2C00            CMP              r4, #0
+   20 0000001E DA03            BGE              pos
+   21 00000020 F109 0901       ADD              r9,r9, #1
+   22 00000024 1936            ADDS             r6, r6, r4
+   23 00000026 E002            B                next
+   24 00000028         pos
+   25 00000028 F108 0801       ADD              r8,r8, #1
+   26 0000002C 192D            ADDS             r5, r5, r4
+   27 0000002E         next
+   28 0000002E BF68 6017       STRVS            r7, [r2]    ;salvo FF come valo
+                                                            re overflow
+   29 00000032 F100 0004       ADD              r0, r0, #4
+   30 00000036 F1A1 0101       SUB              r1, r1, #1
+   31 0000003A 2900            CMP              r1, #0
+   32 0000003C D1ED            BNE              ciclo
+   33 0000003E         
+   34 0000003E FB95 F5F8       SDIV             r5, r5, r8
+   35 00000042 FB96 F6F9       SDIV             r6, r6, r9
+   36 00000046         
+   37 00000046 EB05 0006       ADD              r0, r5, r6
+   38 0000004A         
+   39 0000004A         ; restore volatile registers
+   40 0000004A E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   41 0000004E         
+   42 0000004E                 ENDP
+   43 0000004E                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_functions.d -o.\asm_functions.o -I.\RTE\_Target_1 -IC:\Users
+\albertomuscara\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:
+\Users\albertomuscara\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Inc
+lude --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 538" --pre
+define="_RTE_ SETA 1" --predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1
+" --list=.\asm_functions.lst ASM_functions.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+ASM_functions 00000000
+
+Symbol: ASM_functions
+   Definitions
+      At line 1 in file ASM_functions.s
+   Uses
+      None
+Comment: ASM_functions unused
+ciclo 0000001A
+
+Symbol: ciclo
+   Definitions
+      At line 17 in file ASM_functions.s
+   Uses
+      At line 32 in file ASM_functions.s
+Comment: ciclo used once
+differenza_media_positivi_negativi 00000000
+
+Symbol: differenza_media_positivi_negativi
+   Definitions
+      At line 4 in file ASM_functions.s
+   Uses
+      At line 2 in file ASM_functions.s
+Comment: differenza_media_positivi_negativi used once
+next 0000002E
+
+Symbol: next
+   Definitions
+      At line 27 in file ASM_functions.s
+   Uses
+      At line 23 in file ASM_functions.s
+Comment: next used once
+pos 00000028
+
+Symbol: pos
+   Definitions
+      At line 24 in file ASM_functions.s
+   Uses
+      At line 20 in file ASM_functions.s
+Comment: pos used once
+5 symbols
+339 symbols in table

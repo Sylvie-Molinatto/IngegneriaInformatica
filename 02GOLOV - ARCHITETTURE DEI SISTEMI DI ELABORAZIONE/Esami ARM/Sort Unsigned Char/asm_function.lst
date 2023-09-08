@@ -1,0 +1,132 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000                 AREA             asm_function, CODE, READONLY
+    3 00000000                 EXPORT           sort
+    4 00000000         
+    5 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+    6 00000000 46EC            MOV              r12, sp
+    7 00000002         ; save volatile registers
+    8 00000002 E92D 4DF0 
+                       sort    STMFD            sp!,{r4-r8,r10-r11,lr}
+    9 00000006         
+   10 00000006         bsort_next                           ; Check for a sorte
+                                                            d array
+   11 00000006 F04F 0200       MOV              R2,#0       ; R2 = Current Elem
+                                                            ent Number
+   12 0000000A F04F 0600       MOV              R6,#0       ; R6 = Number of sw
+                                                            aps
+   13 0000000E         bsort_loop                           ; Start loop
+   14 0000000E F102 0301       ADD              R3,R2,#1    ; R3 = Next Element
+                                                             Number
+   15 00000012 428B            CMP              R3,R1       ; Check for the end
+                                                             of the array
+   16 00000014 DA08            BGE              bsort_check ; When we reach the
+                                                             end, check for cha
+                                                            nges
+   17 00000016 5C84            LDRB             R4,[R0,R2]  ; R4 = Current Elem
+                                                            ent Value
+   18 00000018 5CC5            LDRB             R5,[R0,R3]  ; R5 = Next Element
+                                                             Value
+   19 0000001A 42AC            CMP              R4,R5       ; Compare element v
+                                                            alues
+   20 0000001C BFC2 5485       STRBGT           R5,[R0,R2]  ; If R4 > R5, store
+                                                             current value at n
+                                                            ext
+   21 00000020 54C4            STRBGT           R4,[R0,R3]  ; If R4 > R5, Store
+                                                             next value at curr
+                                                            ent
+   22 00000022 1C76            ADDGT            R6,R6,#1    ; If R4 > R5, Incre
+                                                            ment swap counter
+   23 00000024 461A            MOV              R2,R3       ; Advance to the ne
+                                                            xt element
+   24 00000026 E7F2            B                bsort_loop  ; End loop
+   25 00000028         bsort_check                          ; Check for changes
+                                                            
+   26 00000028 2E00            CMP              R6,#0       ; Were there change
+                                                            s this iteration?
+   27 0000002A BFC8 1E49       SUBGT            R1,R1,#1    ; Optimization: ski
+                                                            p last value in nex
+                                                            t loop
+   28 0000002E DCEA            BGT              bsort_next  ; If there were cha
+                                                            nges, do it again
+   29 00000030         
+   30 00000030         ; restore volatile registers
+   31 00000030 E8BD 8DF0 
+                       fine    LDMFD            sp!,{r4-r8,r10-r11,pc}
+   32 00000034         
+   33 00000034                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_function.d -o.\asm_function.o -I.\RTE\_Target_1 -IC:\Users\A
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+SUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\
+AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EV
+AL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" 
+--predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_functio
+n.lst asm_function.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_function 00000000
+
+Symbol: asm_function
+   Definitions
+      At line 2 in file asm_function.s
+   Uses
+      None
+Comment: asm_function unused
+bsort_check 00000028
+
+Symbol: bsort_check
+   Definitions
+      At line 25 in file asm_function.s
+   Uses
+      At line 16 in file asm_function.s
+Comment: bsort_check used once
+bsort_loop 0000000E
+
+Symbol: bsort_loop
+   Definitions
+      At line 13 in file asm_function.s
+   Uses
+      At line 24 in file asm_function.s
+Comment: bsort_loop used once
+bsort_next 00000006
+
+Symbol: bsort_next
+   Definitions
+      At line 10 in file asm_function.s
+   Uses
+      At line 28 in file asm_function.s
+Comment: bsort_next used once
+fine 00000030
+
+Symbol: fine
+   Definitions
+      At line 31 in file asm_function.s
+   Uses
+      None
+Comment: fine unused
+sort 00000002
+
+Symbol: sort
+   Definitions
+      At line 8 in file asm_function.s
+   Uses
+      At line 3 in file asm_function.s
+Comment: sort used once
+6 symbols
+340 symbols in table

@@ -1,0 +1,75 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000                 AREA             asm_function, CODE, READONLY
+    3 00000000                 EXPORT           divisible
+    4 00000000         
+    5 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+    6 00000000 46EC    divisible
+                               MOV              r12, sp
+    7 00000002         ; save volatile registers
+    8 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+    9 00000006         
+   10 00000006 4288    ciclo   cmp              r0, r1
+   11 00000008 BFA8 EBB0 
+              0001             subsge           r0, r0, r1
+   12 0000000E DCFA            bgt              ciclo
+   13 00000010         
+   14 00000010         
+   15 00000010         ; restore volatile registers
+   16 00000010 E8BD 8DF0 
+                       fine    LDMFD            sp!,{r4-r8,r10-r11,pc}
+   17 00000014         
+   18 00000014                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_function.d -o.\asm_function.o -I.\RTE\_Target_1 -IC:\Users\A
+SUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\
+AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EV
+AL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" 
+--predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_functio
+n.lst asm_function.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_function 00000000
+
+Symbol: asm_function
+   Definitions
+      At line 2 in file asm_function.s
+   Uses
+      None
+Comment: asm_function unused
+ciclo 00000006
+
+Symbol: ciclo
+   Definitions
+      At line 10 in file asm_function.s
+   Uses
+      At line 12 in file asm_function.s
+Comment: ciclo used once
+divisible 00000000
+
+Symbol: divisible
+   Definitions
+      At line 6 in file asm_function.s
+   Uses
+      At line 3 in file asm_function.s
+Comment: divisible used once
+fine 00000010
+
+Symbol: fine
+   Definitions
+      At line 16 in file asm_function.s
+   Uses
+      None
+Comment: fine unused
+4 symbols
+338 symbols in table

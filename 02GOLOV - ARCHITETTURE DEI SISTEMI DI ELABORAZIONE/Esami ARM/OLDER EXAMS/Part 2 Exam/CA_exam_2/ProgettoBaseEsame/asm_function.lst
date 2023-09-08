@@ -1,0 +1,115 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000                 AREA             asm_function, CODE, READONLY
+    3 00000000                 EXPORT           overflow
+    4 00000000         
+    5 00000000         ; save current SP for a faster access to parameters in t
+                       he stack
+    6 00000000 46EC    overflow
+                               MOV              r12, sp
+    7 00000002         ; save volatile registers
+    8 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+    9 00000006         
+   10 00000006         
+   11 00000006         ; R0 V[N]
+   12 00000006         ; R1 N
+   13 00000006         
+   14 00000006 F04F 0200       MOV              R2, #0      ;contatore
+   15 0000000A F04F 0400       MOV              R4, #0      ;somma
+   16 0000000E         
+   17 0000000E 6803    ciclo   LDR              R3, [R0]
+   18 00000010 18E4            ADDS             R4, R4, R3
+   19 00000012 D607            BVS              return_0
+   20 00000014 D209            BCS              return_1
+   21 00000016 F100 0004       ADD              R0, R0, #4
+   22 0000001A 1E49            SUBS             R1, R1, #1
+   23 0000001C D1F7            BNE              ciclo
+   24 0000001E         
+   25 0000001E F04F 0002       MOV              R0, #2
+   26 00000022 E005            B                fine
+   27 00000024         
+   28 00000024 F04F 0000 
+                       return_0
+                               MOV              R0, #0
+   29 00000028 E002            b                fine
+   30 0000002A         
+   31 0000002A F04F 0000 
+                       return_1
+                               MOV              R0, #0
+   32 0000002E E7FF            b                fine
+   33 00000030         
+   34 00000030         ; restore volatile registers
+   35 00000030 E8BD 8DF0 
+                       fine    LDMFD            sp!,{r4-r8,r10-r11,pc}
+   36 00000034         
+   37 00000034                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_function.d -o.\asm_function.o -I.\RTE\_Target_1 -IC:\Users\A
+SUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\
+AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EV
+AL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" 
+--predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_functio
+n.lst asm_function.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_function 00000000
+
+Symbol: asm_function
+   Definitions
+      At line 2 in file asm_function.s
+   Uses
+      None
+Comment: asm_function unused
+ciclo 0000000E
+
+Symbol: ciclo
+   Definitions
+      At line 17 in file asm_function.s
+   Uses
+      At line 23 in file asm_function.s
+Comment: ciclo used once
+fine 00000030
+
+Symbol: fine
+   Definitions
+      At line 35 in file asm_function.s
+   Uses
+      At line 26 in file asm_function.s
+      At line 29 in file asm_function.s
+      At line 32 in file asm_function.s
+
+overflow 00000000
+
+Symbol: overflow
+   Definitions
+      At line 6 in file asm_function.s
+   Uses
+      At line 3 in file asm_function.s
+Comment: overflow used once
+return_0 00000024
+
+Symbol: return_0
+   Definitions
+      At line 28 in file asm_function.s
+   Uses
+      At line 19 in file asm_function.s
+Comment: return_0 used once
+return_1 0000002A
+
+Symbol: return_1
+   Definitions
+      At line 31 in file asm_function.s
+   Uses
+      At line 20 in file asm_function.s
+Comment: return_1 used once
+6 symbols
+340 symbols in table

@@ -1,0 +1,123 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000         ; Flags: NZCV
+    3 00000000         ; - EQ:(==) Z set 
+    4 00000000         ; - NE:(!=) Z clear 
+    5 00000000         ; - HI:(> ) C set, Z clear 
+    6 00000000         ; - HS:(>=) C set 
+    7 00000000         ; - LO:(< ) C clear
+    8 00000000         ; - LS:(<=) C clear, Z set 
+    9 00000000         ; - MI:(negative) N set
+   10 00000000         ; - PL:(positive) N clear
+   11 00000000         ; - VS:(overflow) V set
+   12 00000000         ; - VC:(no oflow) V clear
+   13 00000000         
+   14 00000000         ; ALU instructions:
+   15 00000000         ; - TST r1, r2: (&)logical AND 
+   16 00000000         ; - CMP r1, r2: arithmetic subtract (-)
+   17 00000000         ; - ADD, MUL, SUB: 32 bit
+   18 00000000         ; - ADC, U/SMULL, SBC: 64 bit
+   19 00000000         ; - U/SDIV: 32 bit
+   20 00000000         ; - LSL/R: logical shift left/right
+   21 00000000         ; - MOV Rd, #const: loads 16-bit const (0x00XY00XY)
+   22 00000000         ; - LDR Rd, =const: loads (word) const in register
+   23 00000000         ; - LDR Rd, =label: loads address in register
+   24 00000000         ; - LDRB/H/D/M: loads byte/half-word/2-words/multiple
+   25 00000000         ; - STRB/H/D/M: stores byte/half-word/2-words/multiple
+   26 00000000         
+   27 00000000         ; Branch instructions:
+   28 00000000         ; - B label: branch to label
+   29 00000000         ; - BX Rn: branch to register address
+   30 00000000         ; - BL label: branch and link
+   31 00000000         ; - BLX Rn: branch to register and link
+   32 00000000         
+   33 00000000         ; Conditional (after CMP Rn, op {= Rm/#imm}):
+   34 00000000         ; - BEQ: branch if Rn == op
+   35 00000000         ; - BLO: branch if Rn < op
+   36 00000000         ; - BLS: branch if Rn <= op
+   37 00000000         ; - BHI: branch if Rn > op
+   38 00000000         ; - BHS: branch if Rn >= op
+   39 00000000         ; - see "Flags" for other suffix
+   40 00000000         
+   41 00000000         ; Directives:
+   42 00000000         ; - name EQU expr : constant declaration
+   43 00000000         ; - {label} DCxx expr{,expr}: constant allocation
+   44 00000000         ;  - DCB/W: define costant byte/half-word
+   45 00000000         ; - DCWU: half-word unaligned
+   46 00000000         ; - DCD: define costant word
+   47 00000000         ; - DCDU: word unaligned
+   48 00000000         ;  - ('expr' can be a string)
+   49 00000000         ; - ALIGN {expr{, offset}}: alignment, pad with 0s
+   50 00000000         ;  - current location: n * expr + offset
+   51 00000000         ; - {label} SPACE expr: memory block reservation
+   52 00000000         ;  - expr: number of bytes
+   53 00000000         ; - LTORG: collocates the literal pool
+   54 00000000         
+   55 00000000         ; Addressing:
+   56 00000000         ; - load/store Rd, [Rn, offset{, LSL #const}]{!}: pre-in
+                       dexed
+   57 00000000         ; - offset: 12-bit const or register
+   58 00000000         ;  - !: updates Rn at end of instruction
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   59 00000000         ; - load/store Rd, [Rn], offset: post-indexed
+   60 00000000         ;  - offset: Rn is always updated
+   61 00000000         
+   62 00000000                 AREA             asm_functions, CODE, READONLY
+   63 00000000                 EXPORT           C_function_name
+   64 00000000         C_function_name                      ; code goes below
+   65 00000000         ; save current sp for a faster access to parameters in t
+                       he stack
+   66 00000000 46EC            MOV              r12, sp
+   67 00000002         ; save volatile registers
+   68 00000002 E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+   69 00000006         
+   70 00000006         ; code body
+   71 00000006         
+   72 00000006         ; setup a value for r0 to return
+   73 00000006         ; fine    
+   74 00000006         ; MOV r0, rN
+   75 00000006         ; restore volatile registers
+   76 00000006 E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+   77 0000000A         
+   78 0000000A                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_functions.d -o.\asm_functions.o -I.\RTE\_Target_1 -IC:\Users
+\Stefano\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include -IC:\Users\
+Stefano\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefi
+ne="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ 
+SETA 1" --predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm
+_functions.lst RIT\ASM_functions.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+C_function_name 00000000
+
+Symbol: C_function_name
+   Definitions
+      At line 64 in file RIT\ASM_functions.s
+   Uses
+      At line 63 in file RIT\ASM_functions.s
+Comment: C_function_name used once
+asm_functions 00000000
+
+Symbol: asm_functions
+   Definitions
+      At line 62 in file RIT\ASM_functions.s
+   Uses
+      None
+Comment: asm_functions unused
+2 symbols
+336 symbols in table
