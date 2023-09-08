@@ -1,0 +1,72 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             asm_functions, CODE, READONLY
+    2 00000000                 EXPORT           ASM_monotono
+    3 00000000         
+    4 00000000         ASM_monotono
+    5 00000000         ; save current SP for a faster access 
+    6 00000000         ; to parameters in the stack
+    7 00000000 46EC            MOV              r12, sp
+    8 00000002         ; save volatile registers
+    9 00000002 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+   10 00000006 F04F 02FF       mov              r2, #0xff   ; result value
+   11 0000000A F04F 0300       mov              r3, #0      ; pointer
+   12 0000000E F04F 0400       mov              r4, #0      ; reference 
+   13 00000012         ciclo
+   14 00000012 5CC5            ldrb             r5, [r0,r3]
+   15 00000014 42A5            cmp              r5,r4
+   16 00000016 BF38 2255       movlo            r2, #0x55   ;
+   17 0000001A 462C            mov              r4,r5
+   18 0000001C F103 0301       add              r3,r3,#1
+   19 00000020 428B            cmp              r3,r1
+   20 00000022 D3F6            blo              ciclo
+   21 00000024         
+   22 00000024 4610            mov              r0, r2
+   23 00000026         
+   24 00000026         ; restore volatile registers
+   25 00000026 E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   26 0000002A         
+   27 0000002A                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_functions.d -o.\asm_functions.o -I.\RTE\_Target_1 -IC:\Users
+\ASUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASU
+S\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__
+EVAL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1
+" --predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_funct
+ions.lst ASM_functions.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+ASM_monotono 00000000
+
+Symbol: ASM_monotono
+   Definitions
+      At line 4 in file ASM_functions.s
+   Uses
+      At line 2 in file ASM_functions.s
+Comment: ASM_monotono used once
+asm_functions 00000000
+
+Symbol: asm_functions
+   Definitions
+      At line 1 in file ASM_functions.s
+   Uses
+      None
+Comment: asm_functions unused
+ciclo 00000012
+
+Symbol: ciclo
+   Definitions
+      At line 13 in file ASM_functions.s
+   Uses
+      At line 20 in file ASM_functions.s
+Comment: ciclo used once
+3 symbols
+337 symbols in table
