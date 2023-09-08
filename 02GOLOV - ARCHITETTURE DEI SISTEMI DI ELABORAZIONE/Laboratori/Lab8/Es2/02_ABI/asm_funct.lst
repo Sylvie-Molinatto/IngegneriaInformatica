@@ -1,0 +1,101 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000                 AREA             asm_functions, CODE, READONLY
+    3 00000000                 IMPORT           __aeabi_fdiv
+    4 00000000         
+    5 00000000         check_square
+                               PROC
+    6 00000000                 EXPORT           check_square
+    7 00000000         
+    8 00000000         ;save volatile registers
+    9 00000000 E92D 4DF0       STMFD            sp!,{r4-r8,r10-r11,lr}
+   10 00000004         
+   11 00000004 FB00 F000       MUL              r0, r0, r0  ; x^2
+   12 00000008 FB01 F101       MUL              r1, r1, r1  ; y^2
+   13 0000000C FB02 F202       MUL              r2, r2, r2  ; r^2
+   14 00000010 EB00 0401       ADD              r4, r0, r1  ; x^2+y^2
+   15 00000014 4294            CMP              r4,r2
+   16 00000016 BFD4 2001       MOVLE            r0,#1
+   17 0000001A 2000            MOVGT            r0,#0
+   18 0000001C         
+   19 0000001C         ; restore volatile registers
+   20 0000001C E8BD 8DF0       LDMFD            sp!,{r4-r8,r10-r11,pc}
+   21 00000020         
+   22 00000020                 ENDP
+   23 00000020         
+   24 00000020         my_division
+                               PROC
+   25 00000020                 EXPORT           my_division
+   26 00000020         
+   27 00000020 B5F0            STMFD            sp!, {r4-r7,lr}
+   28 00000022         
+   29 00000022 6800            LDR              r0, [r0]    ; *a
+   30 00000024 6809            LDR              r1, [r1]    ; *b
+   31 00000026         
+   32 00000026 F7FF FFFE       BL               __aeabi_fdiv
+   33 0000002A         
+   34 0000002A BDF0            LDMFD            sp!,{r4-r7,pc}
+   35 0000002C         
+   36 0000002C                 ENDP
+   37 0000002C         
+   38 0000002C         
+   39 0000002C                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_funct.d -o.\asm_funct.o -I.\RTE\_Target_1 -IC:\Users\ASUS\Ap
+pData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASUS\AppDat
+a\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EVAL SET
+A 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1" --pred
+efine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_funct.lst ASM
+_funct.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_functions 00000000
+
+Symbol: asm_functions
+   Definitions
+      At line 2 in file ASM_funct.s
+   Uses
+      None
+Comment: asm_functions unused
+check_square 00000000
+
+Symbol: check_square
+   Definitions
+      At line 5 in file ASM_funct.s
+   Uses
+      At line 6 in file ASM_funct.s
+Comment: check_square used once
+my_division 00000020
+
+Symbol: my_division
+   Definitions
+      At line 24 in file ASM_funct.s
+   Uses
+      At line 25 in file ASM_funct.s
+Comment: my_division used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+__aeabi_fdiv 00000000
+
+Symbol: __aeabi_fdiv
+   Definitions
+      At line 3 in file ASM_funct.s
+   Uses
+      At line 32 in file ASM_funct.s
+Comment: __aeabi_fdiv used once
+1 symbol
+338 symbols in table

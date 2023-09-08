@@ -1,0 +1,138 @@
+Dependencies for Project 'sample', Target 'Target 1': (DO NOT MODIFY !)
+CompilerVersion: 6180000::V6.18::ARMCLANG
+F (.\startup_LPC17xx.s)(0x4CCAADFA)(--target=arm-arm-none-eabi -mcpu=cortex-m3 -masm=auto -c-gdwarf-4 -Wa,armasm,--pd,"__EVAL SETA 1"-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-Wa,armasm,--pd,"__UVISION_VERSION SETA 537" -Wa,armasm,--pd,"_RTE_ SETA 1" -Wa,armasm,--pd,"LPC175x_6x SETA 1" -Wa,armasm,--pd,"_RTE_ SETA 1"-o ./startup_lpc17xx.o)
+F (.\sample.c)(0x5C738B96)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./sample.o -MD)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x6252B536)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\LPC17xx.H)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+I (led\led.h)(0x5C7393A6)
+I (button_EXINT\button.h)(0x5A36980A)
+I (timer\timer.h)(0x5C18CB60)
+I (RIT\RIT.h)(0x5C18CD48)
+I (joystick\joystick.h)(0x5C290304)
+F (.\core_cm3.c)(0x4AC99CCC)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./core_cm3.o -MD)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+F (.\system_LPC17xx.c)(0x631A1654)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./system_lpc17xx.o -MD)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\LPC17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+F (.\led\funct_led.c)(0x5C7393A6)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./funct_led.o -MD)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\lpc17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+I (led\led.h)(0x5C7393A6)
+F (.\led\lib_led.c)(0x5C0779E8)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./lib_led.o -MD)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\lpc17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+I (led\led.h)(0x5C7393A6)
+F (.\led\led.h)(0x5C7393A6)()
+F (.\button_EXINT\button.h)(0x5A36980A)()
+F (.\button_EXINT\IRQ_button.c)(0x5C738E24)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./irq_button.o -MD)
+I (button_EXINT\button.h)(0x5A36980A)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\lpc17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+F (.\button_EXINT\lib_button.c)(0x5C086F2A)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./lib_button.o -MD)
+I (button_EXINT\button.h)(0x5A36980A)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\lpc17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+F (.\timer\IRQ_timer.c)(0x5C11C6B4)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./irq_timer.o -MD)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\lpc17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+I (timer\timer.h)(0x5C18CB60)
+F (.\timer\lib_timer.c)(0x5C738B1A)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./lib_timer.o -MD)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\lpc17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+I (timer\timer.h)(0x5C18CB60)
+F (.\timer\timer.h)(0x5C18CB60)()
+F (.\RIT\IRQ_RIT.c)(0x5C73ADC6)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./irq_rit.o -MD)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\lpc17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+I (RIT\RIT.h)(0x5C18CD48)
+I (RIT\..\led\led.h)(0x5C7393A6)
+I (RIT\..\timer\timer.h)(0x5C18CB60)
+F (.\RIT\lib_RIT.c)(0x5C1ABDCC)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./lib_rit.o -MD)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\lpc17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+I (RIT\RIT.h)(0x5C18CD48)
+F (.\RIT\RIT.h)(0x5C18CD48)()
+F (.\count_bits_to_1.s)(0x5C73AA22)(--target=arm-arm-none-eabi -mcpu=cortex-m3 -masm=auto -c-gdwarf-4 -Wa,armasm,--pd,"__EVAL SETA 1"-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-Wa,armasm,--pd,"__UVISION_VERSION SETA 537" -Wa,armasm,--pd,"_RTE_ SETA 1" -Wa,armasm,--pd,"LPC175x_6x SETA 1" -Wa,armasm,--pd,"_RTE_ SETA 1"-o ./count_bits_to_1.o)
+F (.\joystick\funct_joystick.c)(0x5C2907E0)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./funct_joystick.o -MD)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\lpc17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+I (joystick\joystick.h)(0x5C290304)
+I (joystick\..\led\led.h)(0x5C7393A6)
+F (.\joystick\joystick.h)(0x5C290304)()
+F (.\joystick\lib_joystick.c)(0x5C738DC8)(-xc -std=c90 --target=arm-arm-none-eabi -mcpu=cortex-m3 -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O1 -fno-function-sections-I./RTE/_Target_1-IC:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include-IC:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include-D__UVISION_VERSION="537" -D_RTE_ -DLPC175x_6x -D_RTE_-o ./lib_joystick.o -MD)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\lpc17xx.h)(0x58493F92)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm3.h)(0x626F9F3E)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6252B538)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armclang.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x626F9F3E)
+I (C:\Users\Us\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.6.0\Device\Include\system_LPC17xx.h)(0x58493F92)
+I (joystick\joystick.h)(0x5C290304)

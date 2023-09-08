@@ -1,0 +1,315 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             morse, DATA, READONLY
+    2 00000000         
+    3 00000000 FFFFFF01 
+              FFFF1000 
+              FFFF1010 
+              FFFFF100 
+              FFFFFFF0 
+              FFFF0010 MORSE_TABLE
+                               DCD              0xFFFFFF01, 0xFFFF1000, 0xFFFF1
+010, 0xFFFFF100, 0xFFFFFFF0, 0xFFFF0010
+    4 00000018 FFFFF110 
+              FFFF0000 
+              FFFFFF00 
+              FFFF0111 
+              FFFFF101 
+              FFFF0100         DCD              0xFFFFF110, 0xFFFF0000, 0xFFFFF
+F00, 0xFFFF0111, 0xFFFFF101, 0xFFFF0100
+    5 00000030 FFFFFF11 
+              FFFFFF10 
+              FFFFF111 
+              FFFF0110 
+              FFFF1101 
+              FFFFF010         DCD              0xFFFFFF11, 0xFFFFFF10, 0xFFFFF
+111, 0xFFFF0110, 0xFFFF1101, 0xFFFFF010
+    6 00000048 FFFFF000 
+              FFFFFFF1 
+              FFFFF001 
+              FFFF0001 
+              FFFFF011 
+              FFFF1001         DCD              0xFFFFF000, 0xFFFFFFF1, 0xFFFFF
+001, 0xFFFF0001, 0xFFFFF011, 0xFFFF1001
+    7 00000060 FFFF1011 
+              FFFF1100 
+              FFF01111 
+              FFF00111 
+              FFF00011 
+              FFF00001         DCD              0xFFFF1011, 0xFFFF1100, 0xFFF01
+111, 0xFFF00111, 0xFFF00011, 0XFFF00001
+    8 00000078 FFF00000 
+              FFF10000 
+              FFF11000 
+              FFF11100 
+              FFF11110 
+              FFF11111         DCD              0xFFF00000, 0xFFF10000, 0XFFF11
+000, 0xFFF11100, 0xFFF11110, 0XFFF11111
+    9 00000090         
+   10 00000090 41 42 43 
+              44 45 46 
+              47 48 49 CONVERSION_TABLE
+                               DCB              "A", "B", "C", "D", "E", "F", "
+G", "H", "I"
+   11 00000099 4A 4B 4C 
+              4D 4E 4F 
+              50 51 52         DCB              "J", "K", "L", "M", "N", "O", "
+P", "Q", "R"
+   12 000000A2 53 54 55 
+              56 57 58 
+              59 5A 31         DCB              "S", "T", "U", "V", "W", "X", "
+Y", "Z", "1"
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   13 000000AB 32 33 34 
+              35 36 37 
+              38 39 30         DCB              "2", "3", "4", "5", "6", "7", "
+8", "9", "0"
+   14 000000B4         
+   15 000000B4                 AREA             asm_functions, CODE, READONLY
+   16 00000000         
+   17 00000000         
+   18 00000000         translate_morse
+                               PROC
+   19 00000000                 EXPORT           translate_morse
+   20 00000000 46EC            MOV              R12, SP
+   21 00000002 E92D 5FFE       STMFD            SP!, {R1-R12, LR}
+   22 00000006         
+   23 00000006 F04F 0300       MOV              R3, #0
+   24 0000000A F85C 4B04       LDR              R4, [R12], #4 ; separator
+   25 0000000E F85C 5B04       LDR              R5, [R12], #4 ; space
+   26 00000012 F8DC 6000       LDR              R6, [R12]   ; end
+   27 00000016 F04F 0800       MOV              r8, #0      ; i
+   28 0000001A 4689            MOV              r9, r1      ; input_vector leng
+                                                            th
+   29 0000001C         
+   30 0000001C F04F 37FF 
+                       loop    MOV              R7, #0xFFFFFFFF
+   31 00000020         
+   32 00000020 F108 0801 
+                       next    ADD              r8, r8, #1
+   33 00000024 45C8            CMP              r8,r9
+   34 00000026 DC2E            BGT              exit
+   35 00000028 F810 1B01       LDRB             R1, [R0], #1
+   36 0000002C 2930            CMP              R1, #0x30   ;is 0?
+   37 0000002E D104            BNE              equal_1
+   38 00000030 EA4F 1707       LSL              R7, R7, #4
+   39 00000034 F087 0700       EOR              R7, #0
+   40 00000038 E7F2            B                next
+   41 0000003A         
+   42 0000003A 2931    equal_1 CMP              R1, #0x31   ; is 1?
+   43 0000003C D104            BNE              is_terminator
+   44 0000003E EA4F 1707       LSL              R7, R7, #4
+   45 00000042 F087 0701       EOR              R7, #1
+   46 00000046 E7EB            B                next
+   47 00000048         
+   48 00000048 42B1    is_terminator
+                               CMP              R1, R6      ; is end?
+   49 0000004A D107            BNE              is_separator
+   50 0000004C F7FF FFFE       BL               find_match
+   51 00000050 F802 7B01       STRB             r7, [r2], #1
+   52 00000054 F103 0301       ADD              R3, R3, #1
+   53 00000058 4618            MOV              R0, R3
+   54 0000005A E014            B                exit
+   55 0000005C         
+   56 0000005C 42A1    is_separator
+                               CMP              R1, R4      ; is separator?
+   57 0000005E D106            BNE              is_space
+   58 00000060 F7FF FFFE       BL               find_match
+   59 00000064 F802 7B01       STRB             r7, [r2], #1
+   60 00000068 F103 0301       ADD              R3, R3, #1
+   61 0000006C E7D6            B                loop
+   62 0000006E         
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   63 0000006E 42A9    is_space
+                               CMP              R1, R5      ; is space?
+   64 00000070 F7FF FFFE       BL               find_match
+   65 00000074 F802 7B01       STRB             r7, [r2], #1
+   66 00000078 F04F 0720       MOV              r7, #0x20
+   67 0000007C F802 7B01       STRB             r7, [r2], #1
+   68 00000080 F103 0302       ADD              R3, R3, #2
+   69 00000084 E7CA            B                loop
+   70 00000086         
+   71 00000086         
+   72 00000086 E8BD 9FFE 
+                       exit    LDMFD            sp!,{R1-R12, PC}
+   73 0000008A                 ENDP
+   74 0000008A         
+   75 0000008A         find_match
+                               PROC
+   76 0000008A E92D 5F7F       STMFD            SP!, {R0-R6, R8-R12, LR}
+   77 0000008E 4638            MOV              R0,R7
+   78 00000090 4905            LDR              R1, =MORSE_TABLE
+   79 00000092 4B06            LDR              R3, =CONVERSION_TABLE
+   80 00000094         
+   81 00000094 F851 2B04 
+                       loop_2  LDR              R2, [R1], #4
+   82 00000098 F813 4B01       LDRB             R4, [R3], #1
+   83 0000009C 4290            CMP              R0, R2
+   84 0000009E D1F9            BNE              loop_2
+   85 000000A0 4627            MOV              R7, R4
+   86 000000A2         
+   87 000000A2 E8BD 9F7F       LDMFD            SP!, {R0-R6, R8-R12, PC}
+   88 000000A6                 ENDP
+   89 000000A6         
+   90 000000A6                 END
+              00 00 00000000 
+              00000000 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\asm_functions.d -o.\asm_functions.o -I.\RTE\_Target_1 -IC:\Users
+\ASUS\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\ASU
+S\AppData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__
+EVAL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="_RTE_ SETA 1
+" --predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=.\asm_funct
+ions.lst ASM_functions.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+CONVERSION_TABLE 00000090
+
+Symbol: CONVERSION_TABLE
+   Definitions
+      At line 10 in file ASM_functions.s
+   Uses
+      At line 79 in file ASM_functions.s
+Comment: CONVERSION_TABLE used once
+MORSE_TABLE 00000000
+
+Symbol: MORSE_TABLE
+   Definitions
+      At line 3 in file ASM_functions.s
+   Uses
+      At line 78 in file ASM_functions.s
+Comment: MORSE_TABLE used once
+morse 00000000
+
+Symbol: morse
+   Definitions
+      At line 1 in file ASM_functions.s
+   Uses
+      None
+Comment: morse unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+asm_functions 00000000
+
+Symbol: asm_functions
+   Definitions
+      At line 15 in file ASM_functions.s
+   Uses
+      None
+Comment: asm_functions unused
+equal_1 0000003A
+
+Symbol: equal_1
+   Definitions
+      At line 42 in file ASM_functions.s
+   Uses
+      At line 37 in file ASM_functions.s
+Comment: equal_1 used once
+exit 00000086
+
+Symbol: exit
+   Definitions
+      At line 72 in file ASM_functions.s
+   Uses
+      At line 34 in file ASM_functions.s
+      At line 54 in file ASM_functions.s
+
+find_match 0000008A
+
+Symbol: find_match
+   Definitions
+      At line 75 in file ASM_functions.s
+   Uses
+      At line 50 in file ASM_functions.s
+      At line 58 in file ASM_functions.s
+      At line 64 in file ASM_functions.s
+
+is_separator 0000005C
+
+Symbol: is_separator
+   Definitions
+      At line 56 in file ASM_functions.s
+   Uses
+      At line 49 in file ASM_functions.s
+Comment: is_separator used once
+is_space 0000006E
+
+Symbol: is_space
+   Definitions
+      At line 63 in file ASM_functions.s
+   Uses
+      At line 57 in file ASM_functions.s
+Comment: is_space used once
+is_terminator 00000048
+
+Symbol: is_terminator
+   Definitions
+      At line 48 in file ASM_functions.s
+   Uses
+      At line 43 in file ASM_functions.s
+Comment: is_terminator used once
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+loop 0000001C
+
+Symbol: loop
+   Definitions
+      At line 30 in file ASM_functions.s
+   Uses
+      At line 61 in file ASM_functions.s
+      At line 69 in file ASM_functions.s
+
+loop_2 00000094
+
+Symbol: loop_2
+   Definitions
+      At line 81 in file ASM_functions.s
+   Uses
+      At line 84 in file ASM_functions.s
+Comment: loop_2 used once
+next 00000020
+
+Symbol: next
+   Definitions
+      At line 32 in file ASM_functions.s
+   Uses
+      At line 40 in file ASM_functions.s
+      At line 46 in file ASM_functions.s
+
+translate_morse 00000000
+
+Symbol: translate_morse
+   Definitions
+      At line 18 in file ASM_functions.s
+   Uses
+      At line 19 in file ASM_functions.s
+Comment: translate_morse used once
+11 symbols
+350 symbols in table

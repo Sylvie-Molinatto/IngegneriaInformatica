@@ -1,0 +1,35 @@
+; DATA SECTION
+     .data
+
+v1: .byte 15,14,13,12,11,10,9,8
+    .byte 9,10,11,12,13,14,15
+flag: .byte 0
+
+; CODE SECTION
+     .text
+main:
+
+  dadd r1,r0,r0  ; contatore i
+  daddi r2,r0,7  ; 
+  daddi r3,r0,14 ; contatore j
+  daddi r4,r0,9 ;
+  daddi r7,r0,1 ; flag a 1
+  
+
+loop:
+   lb r5, v1(r1) ; carico il valore v1[i] in r5
+   lb r6, v1(r3) ; carico il valore v1[j] in r6
+   bne r5,r6,noPalindroma
+   
+   daddi r1,r1,1;
+   daddi r3,r3,-1;
+   beq r1,r2,endloop
+   bne r1,r2,loop
+
+noPalindroma:
+   sb r0,flag(r0) ;setto il flag a 0
+   halt
+
+endloop:
+   sb r7,flag(r0) ;setto il flag a 1
+   halt

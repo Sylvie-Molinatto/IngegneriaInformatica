@@ -1,0 +1,75 @@
+; DATA SECTION
+     .data
+
+ifmap: 	.byte	1,1,1,1,1,1,1,1
+            .byte 1,1,1,1,1,1,1,1
+            .byte 1,1,1,1,1,1,1,1
+            .byte 1
+kernel: 	.byte	1,1,1,1,1,1,1,1
+            .byte 1
+ofmap:	.space   9
+
+; CODE SECTION
+     .text
+
+ main:
+
+dadd r1,r0,r0 ; riga
+dadd r2,r0,r0 ; colonna
+dadd r3,r0,r0 ; i
+dadd r4,r0,r0 ; j
+dadd r5,r0,r0 ; k
+dadd r6,r0,r0 ; z
+daddi r7,r0,3 ; 
+daddi r8,r0,5 ;
+dadd r9,r0,r0 ; ofmap
+
+loopz:
+
+dadd r1,r3,r5 ; riga=i+k
+dadd r2,r4,r6 ; colonna =j+z
+dmul r10,r3,r7 ; 3*i
+dadd r10,r10,r4 ; 3*i+j
+dmul r11,r1,r8 ; 5*riga
+dadd r11,r11,r2 ; 5*riga+colonna
+dmul r12,r5,r7 ; 3*k
+dadd r12,r12,r6 ; 3*k+z
+lb r13,ifmap(r11) ; ifmap[5*riga+colonna]
+lb r14,kernel(r12) ; kernel[3*k+z]
+dmul r15,r13,r14   ; ifmap[5*riga+colonna]*kernel[3*k+z]
+lb r16, ofmap(r10) ; ofmap[3*i+j]
+dadd r9,r16,r15    ; ofmap[3*i+j]+=ifmap[5*riga+colonna]*kernel[3*k+z]
+sb r9,ofmap(r10)
+daddi r6,r6,1 ; z=z+1
+bne r6,r7,loopz
+
+
+loopk:
+
+daddi r5,r5,1 ; k=k+1
+dadd r6,r0,r0 ; z=0
+bne r5,r7,loopz
+
+
+loopj:
+daddi r4,r4,1 ; j=j+1
+dadd r5,r0,r0 ; k=0
+dadd r6,r0,r0 ; z=0
+bne r4,r7,loopz
+
+
+loopi:
+daddi r3,r3,1 ; i=i+1
+dadd r4,r0,r0 ; j=0
+dadd r5,r0,r0 ; k=0
+dadd r6,r0,r0 ; z=0
+bne r3,r7,loopz
+
+
+endloop:
+halt
+
+
+
+
+ 

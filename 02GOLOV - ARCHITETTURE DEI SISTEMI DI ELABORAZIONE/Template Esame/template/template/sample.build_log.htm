@@ -1,0 +1,98 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.37.0.0
+Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Samuele Gigante, Politecnico di Torino, LIC=----
+ 
+Tool Versions:
+Toolchain:       MDK-Lite  Version: 5.37.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.18
+Assembler:       Armasm.exe V6.18
+Linker/Locator:  ArmLink.exe V6.18
+Library Manager: ArmAr.exe V6.18
+Hex Converter:   FromElf.exe V6.18
+CPU DLL:         SARMCM3.DLL V5.37.0.0
+Dialog DLL:      DARMP1.DLL V1.28.1.0
+Target DLL:      UL2CM3.DLL V1.164.7.0
+Dialog DLL:      TARMP1.DLL V1.27.1.0
+ 
+<h2>Project:</h2>
+E:\template\sample.uvprojx
+Project File Date:  09/10/2022
+
+<h2>Output:</h2>
+*** Using Compiler 'V6.18', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'Target 1'
+core_cm3.c(462): error: non-ASM statement in naked function is not supported
+  uint32_t result=0;
+  ^
+core_cm3.c(459): note: attribute is here
+uint32_t __get_PSP(void) __attribute__( ( naked ) );
+                                          ^
+core_cm3.c(484): error: parameter references not allowed in naked functions
+                  "BX  lr     \n\t" : : "r" (topOfProcStack) );
+                                             ^
+core_cm3.c(480): note: attribute is here
+void __set_PSP(uint32_t topOfProcStack) __attribute__( ( naked ) );
+                                                         ^
+core_cm3.c(499): error: non-ASM statement in naked function is not supported
+  uint32_t result=0;
+  ^
+core_cm3.c(496): note: attribute is here
+uint32_t __get_MSP(void) __attribute__( ( naked ) );
+                                          ^
+core_cm3.c(520): error: parameter references not allowed in naked functions
+                  "BX  lr     \n\t" : : "r" (topOfMainStack) );
+                                             ^
+core_cm3.c(516): note: attribute is here
+void __set_MSP(uint32_t topOfMainStack) __attribute__( ( naked ) );
+                                                         ^
+4 errors generated.
+compiling core_cm3.c...
+timer/lib_timer.c(10): warning: non-portable path to file '"LPC17xx.h"'; specified path differs in case from file name on disk [-Wnonportable-include-path]
+#include "lpc17xx.h"
+         ^~~~~~~~~~~
+         "LPC17xx.h"
+timer/lib_timer.c(119): error: expected expression
+//*** <<< Use Configuration Wizard in Context Menu >>> ***
+^
+timer/lib_timer.c(171): warning: '/*' within block comment [-Wcomment]
+//*** <<< end of configuration section >>>    ***
+ ^
+timer/lib_timer.c(179): warning: '/*' within block comment [-Wcomment]
+        LPC_TIM1->MCR = 3;                              /* Interrupt and Reset on MR1 */
+                                                        ^
+3 warnings and 1 error generated.
+compiling lib_timer.c...
+".\sample.axf" - 5 Error(s), 3 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.9.0.pack
+                ARM.CMSIS.5.9.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.6.0
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.LPC1700_DFP.2.6.0.pack
+                Keil.LPC1700_DFP.2.6.0
+                NXP LPC1700 Series Device Support, Drivers and Examples for MCB1700 and LPC1788-32
+
+<h2>Collection of Component include folders:</h2>
+  ./RTE/_Target_1
+  C:/Users/Us/AppData/Local/Arm/Packs/ARM/CMSIS/5.9.0/CMSIS/Core/Include
+  C:/Users/Us/AppData/Local/Arm/Packs/Keil/LPC1700_DFP/2.6.0/Device/Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.6.0
+Target not created.
+Build Time Elapsed:  00:00:02
+</pre>
+</body>
+</html>

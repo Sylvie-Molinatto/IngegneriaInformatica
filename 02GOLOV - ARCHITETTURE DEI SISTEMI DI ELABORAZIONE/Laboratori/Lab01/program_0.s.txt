@@ -1,0 +1,71 @@
+; DATA SECTION
+     .data
+
+a: .byte 1,-2,3,4,5,6,7,8
+   .byte 1,-2,3,4,5,6,7,8
+   .byte 1,-2,3,4,5,6,7,8
+   .byte 1,-2,3,4,5,6,7,8
+   .byte 1,-2,3,4,5,6,7,8
+   .byte 1,-2,3,4,5,6,7,8
+   .byte -3,0
+
+b: .byte 11,21,31,41,51,61,71,81
+   .byte 11,21,31,41,51,61,71,81
+   .byte 11,21,31,41,51,61,71,81
+   .byte 11,21,31,41,51,61,71,81
+   .byte 11,21,31,100,51,61,71,81
+   .byte 11,21,31,41,51,61,71,81
+   .byte 0,0
+
+c: .byte 0,0,0,0,0,0,0,0
+   .byte 0,0,0,0,0,0,0,0
+   .byte 0,0,0,0,0,0,0,0
+   .byte 0,0,0,0,0,0,0,0
+   .byte 0,0,0,0,0,0,0,0
+   .byte 0,0,0,0,0,0,0,0
+   .byte 0,0
+
+min: .byte 0
+max: .byte 0
+
+; CODE SECTION
+     .text
+main:
+
+  dadd r1,r0,r0 ; contatore i
+  dadd r5,r0,r0   
+  daddui r5,r5,50 ; numero di interi per array
+  lb r7,a(r0)  ; carico il primo valore di min
+  lb r8,a(r0)  ; carico il primo valore di max
+  lb r2, a(r0) ;
+  sb r2,min(r0)  ;imposto il minimo al primo valore dell'array a
+  sb r2, max(r0) ;imposto il massimo al primo valore dell'array a
+
+loop:
+
+   lb r2, a(r1) ; carico il valore a[i] in r2
+   lb r3, b(r1) ; carico il valore b[i] in r3
+   lb r4, c(r1) ; carico il valore c[i] in r4
+   dadd r6,r2,r3 ; sommo i valori
+   sb r6, c(r1)  ; salvo i dati
+   slt r9,r2,r3 ; se r2<r3 allora r9=1 altrimenti r9=0
+   bnez r9,min
+  
+
+min:
+   slt r9,r2,r7 ; controllo se r2<r7
+   beqz r9,max
+   dadd r7,r2,r0
+   sb r2,min(r0)
+
+max:
+   slt r9,r8,r3 ; controllo se r3>r8
+   beqz r9,endloop
+   dadd r8,r3,r0
+   sb r8,max(r0)
+
+endloop:
+   daddui r1,r1,1 ; incremento il contatore
+   bne r1,r5,loop ; controllo se ho ciclato su tutto l'array
+   
+   halt

@@ -1,0 +1,12 @@
+; DATA SECTION
+     .data
+
+ifmap: .byte 0,0,0,0,0,0,1,2
+       .byte 3,0,0,4,5,6,0,0
+       .byte 7,8,9,0,0,0,0,0
+       .byte 0
+kernel: .byte 0,-1,-1,0,2,1,1,0	
+        .byte 4
+ofmap: .space   9
+
+vect: .byte -1
