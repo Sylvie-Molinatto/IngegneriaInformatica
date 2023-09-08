@@ -1,0 +1,5 @@
+?-19 ;                [[- tok2 -]]
+$Feb./29/2020:11:00;  [[- tok3 -]]
+?LANGUAGE+-+-+ ;      [[- tok2 -]]
+3A22*2fa3%123abcD ;   [[- tok1 -]]
+####   [[- division between header and execution sections -]]

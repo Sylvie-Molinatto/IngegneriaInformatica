@@ -1,0 +1,172 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, HashMap<String, Product>>();
+:};
+
+parser code     {:
+
+    class Product{
+        public String name;
+        public Double price;
+
+        public Product(String name, Double price){
+            this.name = name;
+            this.price = price;
+        }
+    }
+
+    public HashMap<String, HashMap<String, Product>> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+
+terminal TK1, TK2, TK3;
+terminal SEP, S, DASH, CM, EURO_WD, DOUBLECOL, PERCENT;
+terminal String  QSTRING; 
+terminal Integer UINT;
+terminal Double REAL;
+
+
+non terminal PROG, header_sec, header_1, header_2, header_3, tok1_tok3_maybe, 
+             catalog_sec, category_l, category, purchase_sec;
+// non terminal ;
+non terminal HashMap<String, Product> product_l;
+// non terminal Integer[];
+non terminal Double discount, pur_product_l, purchase_l, purchase;
+
+// Precedences and associativities
+// lower precedences
+/*
+precedence left OR;
+precedence left OROR;
+precedence left AND;
+precedence left ANDAND;
+precedence left NOT;
+precedence left NOTEQ;
+precedence left MIN, MAJ, MIN_EQ, EQ_MIN, MAJ_EQ, EQ_MAJ, EQ;
+precedence left PLUS, MINUS;
+precedence left STAR, DIV;
+precedence left POW;
+precedence left UMINUS;
+*/
+// higher precedences
+
+//////////////////////////////////////
+// Grammar start
+//////////////////////////////////////
+
+start with PROG;
+
+PROG::= header_sec SEP catalog_sec SEP purchase_sec;
+
+
+/// HEADER SECTION ///
+
+header_sec ::= header_1 | header_2 | header_3; 
+
+header_1::=  tok1_tok3_maybe;
+
+header_2 ::= tok1_tok3_maybe TK2 S tok1_tok3_maybe;
+
+header_3 ::= tok1_tok3_maybe TK2 S tok1_tok3_maybe TK2 S tok1_tok3_maybe TK2 S tok1_tok3_maybe;
+
+tok1_tok3_maybe ::= tok1_tok3_maybe TK1 S | tok1_tok3_maybe TK3 S | ;
+
+/// CATALOG SECTION ///
+
+catalog_sec ::= category_l{:
+    for(String s : parser.table.keySet()){
+        HashMap<String, Product> tab = parser.table.get(s);
+        Double price_max = 0.00;
+        String name_max = "";
+        for(String s1 : tab.keySet()){
+            Product p = tab.get(s1);
+            if(p.price > price_max){
+                price_max = p.price;
+                name_max = p.name;
+            }
+        }
+        System.out.println(name_max+" "+price_max);
+    }
+    System.out.println("---");
+:};
+
+category_l ::= category category category | category_l category category;
+
+category ::= QSTRING:cat DASH product_l:prod_l S{:
+    parser.table.put(cat, prod_l);
+:};
+
+product_l ::=  QSTRING:name QSTRING:code REAL:price EURO_WD {:
+                     Product p = new Product(name, price);
+                     RESULT = new HashMap<String,Product>();
+                     RESULT.put(code,p);
+             :}
+             | product_l:tab CM  QSTRING:name QSTRING:code REAL:price EURO_WD{:
+                     Product p = new Product(name, price);
+                     tab.put(code,p);
+                     RESULT = tab;
+             :};
+
+
+/// PURCHASE SECTION ///
+
+purchase_sec ::= purchase_l:tot{: System.out.println("TOTAL: "+tot); :}; 
+
+purchase_l ::= purchase:val {: RESULT = val; :} | purchase_l:val1 purchase:val2{: RESULT = val1+val2;:};
+
+purchase ::= QSTRING:cat_name discount:discount DOUBLECOL pur_product_l:val S{:
+                    RESULT = val;
+                    //System.out.println(tot);
+         :};
+
+discount ::= DASH UINT:perc PERCENT {:
+                 RESULT = (Double)perc.doubleValue()/100;
+             :}
+             | {: RESULT = 0.00 ; :};
+
+pur_product_l ::= UINT:qty QSTRING:code {:
+                    String category_name = (String)parser.stack(-4);
+                    HashMap<String,Product> tab = parser.table.get(category_name);
+                    Product p = tab.get(code);
+
+                    Double discount = (Double) parser.stack(-3);
+                    
+                    Double price = (Double)qty.doubleValue()*(p.price - p.price*discount);
+                    System.out.println(p.name+" "+price);
+                    RESULT = new Double(price);
+                :} 
+                | pur_product_l:prev CM UINT:qty QSTRING:code{:
+                    String category_name = (String)parser.stack(-6);
+                    HashMap<String,Product> tab = parser.table.get(category_name);
+                    Product p = tab.get(code);
+
+                    Double discount = (Double) parser.stack(-5);
+                    
+                    Double price = (Double)qty.doubleValue()*(p.price - p.price*discount);
+                    System.out.println(p.name+" "+price);
+                    RESULT = new Double(price+prev);
+                :}; 
+

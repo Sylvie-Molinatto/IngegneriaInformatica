@@ -1,0 +1,160 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, HashMap<String, Integer>>();
+:};
+
+parser code     {:
+    public HashMap<String, HashMap<String, Integer>> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:}
+
+terminal TK1, TK2, TK3;
+terminal S, SEP, BO, BC, EQ, CM, RO, RC, ARROW, COL, PIPE, M_CHAR,  METERSECONDS, PRINT_WORD, PART_WORD;
+terminal String QSTRING;
+terminal Integer UINT;
+// terminal Double;
+
+
+non terminal PROG, header, token1_l, car_sec, car, race_sec, print_min_max_l;
+non terminal String NT0, NT1;
+non terminal HashMap speeds_l;
+non terminal Object[] performances_l, section_names_l;
+non terminal Float parts_l, part, drive_stats_l;
+
+// precedence left PLUS,MINUS;
+// precedence left STAR,DIV;
+
+start with PROG;
+
+PROG ::= header SEP car_sec SEP race_sec;
+
+header ::= token1_l TK2 S token1_l TK3 S token1_l | token1_l TK3 S token1_l TK2 S token1_l;
+
+token1_l ::= token1_l TK1 S | ;
+
+/****************/
+/* Cars section */
+/****************/
+
+car_sec ::= car car | car_sec car car;
+
+car ::= QSTRING:s BO speeds_l:tab BC {:
+      parser.table.put(s, tab);
+:};
+
+speeds_l ::= QSTRING:s EQ UINT:u METERSECONDS {:
+                RESULT = new HashMap<String,Integer>();
+                RESULT.put(s,u);
+
+           :}
+           | speeds_l:tab CM QSTRING:s EQ UINT:u METERSECONDS{:
+                tab.put(s,u);
+                RESULT = tab;
+           :};
+
+/****************/
+/* Race section */
+/****************/
+
+race_sec ::= print_min_max_l performances_l:s {:
+    System.out.println("WINNER: "+s[0]+" "+s[1]+" s");
+:};
+
+print_min_max_l ::= print_min_max_l PRINT_WORD RO QSTRING:s RC RO section_names_l:m RC S {:
+                         System.out.println("MIN: "+m[0]+" MAX: "+m[1]);
+                  :} | ;
+
+section_names_l ::= QSTRING:s {:
+                       String car = (String)parser.stack(-3);
+                       HashMap<String, Integer> speeds = parser.table.get(car);
+                       Integer speed = (Integer)speeds.get(s);
+                       RESULT = new Object[2];
+                       RESULT[0] = speed;
+                       RESULT[1] = speed;
+                  :}
+                  | section_names_l:m CM QSTRING:s{:
+                       String car = (String)parser.stack(-5);
+                       HashMap<String, Integer> speeds = parser.table.get(car);
+                       Integer speed = (Integer)speeds.get(s);
+                       RESULT = new Object[2];
+                       if(speed>(Integer)m[1]){
+                        RESULT[0] = m[0];
+                        RESULT[1] = speed;
+                       }
+                       else if(speed<(Integer)m[0]){
+                        RESULT[0] = speed;
+                        RESULT[1] = m[1];
+                       }
+                       else{
+                        RESULT[0] = m[0];
+                        RESULT[1] = m[1];
+                       }
+                  :};
+
+performances_l ::= QSTRING:s {: System.out.println(s); :} ARROW parts_l:x S {:
+                     System.out.println("TOTAL: "+ x +" s");
+                     RESULT = new Object[2];
+                     RESULT[0] = s; //car name
+                     RESULT[1] = x; // result
+                :}
+                 | performances_l:perf QSTRING:s {: System.out.println(s); :} ARROW parts_l:x S{:
+                     System.out.println("TOTAL: "+ x +" s");
+                     RESULT = new Object[2];
+                     if((Float)perf[1] < x){
+                        RESULT[0] = perf[0];
+                        RESULT[1] = perf[1];
+                     }
+                     else{
+                        RESULT[0] = s;
+                        RESULT[1] = x;
+                     }
+                :};
+
+parts_l ::= NT0 part:x {: RESULT = x; :} 
+          | parts_l:res PIPE NT1 part:x {: RESULT = res + x; :};
+
+NT0 ::= {: RESULT = (String)parser.stack(-2); :};
+NT1 ::= {: RESULT = (String)parser.stack(-4); :};
+
+part ::= PART_WORD UINT:x COL drive_stats_l:stat{:
+             RESULT = stat;
+             System.out.println("PART "+ x + ": "+ stat +" s");
+        :};
+
+drive_stats_l ::= QSTRING:s UINT:u M_CHAR {:
+                    String car = (String)parser.stack(-6);
+                    HashMap<String,Integer> speeds = parser.table.get(car);
+                    Integer speed = (Integer)speeds.get(s);
+                    float result = (float)u.intValue() / (float)speed.intValue();
+                    RESULT = new Float(result);
+                  :} 
+                  | drive_stats_l:stat CM QSTRING:s UINT:u M_CHAR{:
+                    String car = (String)parser.stack(-8);
+                    HashMap<String,Integer> speeds = parser.table.get(car);
+                    Integer speed = (Integer)speeds.get(s);
+                    float result = (float)u.intValue() / (float)speed.intValue();
+                    RESULT = new Float(result);
+                    RESULT+=stat;
+                  :};

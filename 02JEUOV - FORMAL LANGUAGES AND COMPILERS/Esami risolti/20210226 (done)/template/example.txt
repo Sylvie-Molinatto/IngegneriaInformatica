@@ -1,0 +1,20 @@
+A_10#-22#0;             <<- tok1 ->>
+C_++--++--+-+-++-- ;    <<- tok3 ->>
+B_2020 December 03;     <<- tok2 ->>
+A_-3#156#12 ;           <<- tok1 ->>
+
+$$$ <<- division between header and catalog sections ->>
+
+"cars" - "Red car"   "c1" 15000.00 euro,
+         "Green car" "c2" 18000.00 euro;
+
+"motorcycles" - "Fast motorcycle" "c1" 8000.00 euro;
+
+"trucks" - "Big truck"    "c1" 70000.00 euro,
+           "Medium truck" "c2" 60000.00 euro,
+           "Small truck"  "c3" 50000.00 euro;
+
+$$$ <<- division between catalog and purchases section ->>
+
+"trucks" - 10 % :: 4 "c3", 1 "c1";
+"cars" :: 2 "c1";

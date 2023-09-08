@@ -1,0 +1,8 @@
+[[-- Header section: of type 1 --]]
+R-XXXXXXXX ; [[-- tok2 --]]
+R-XXYYXXYYXX???? ; [[-- tok2 --]]
+R-XXYYXXYYZZXXYYXX; [[-- tok2 --]]
+D-05/August/2022 ; [[-- tok1 --]]
+N-2B*Bc2*bC2/aaa/aAa; [[-- tok3 --]]
+D-10/August/2022-03/January/2023 ; [[-- tok1 --]]
+==== [[-- division between header and execution sections --]]

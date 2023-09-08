@@ -1,0 +1,121 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    HEIGHT = 0;
+    SPEED = 0;
+:};
+
+parser code     {:
+    public Integer HEIGHT;
+    public Integer SPEED;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+
+terminal TK1, TK2, TK3, S, SEP, INIT_WD, CM, HEIGHT_WD, SPEED_WD, EQ, SUM, MUL, 
+         COND_WD, SO, SC, UPDATE_WD, MAJ, DONE;
+// terminal String;
+terminal Integer UINT;
+// terminal Double;
+
+
+non terminal PROG, header_sec, tok1_maybe, tok2_maybe, sim_sec, init_instr, heigth_ass_cmd, speed_ass_cmd, 
+             ass_l, height_ass_cmd_C, speed_ass_cmd_C;
+// non terminal ;
+// non terminal HashMap;
+non terminal Integer expr, comparison, NT0, NT1, cmd, cond;
+// non terminal Double;
+
+precedence left SUM;
+precedence left MUL;
+
+start with PROG;
+
+PROG ::= header_sec SEP sim_sec;
+
+/// HEADER SECTION
+
+header_sec ::= tok1_maybe tok2_maybe | tok1_maybe tok2_maybe TK3 S tok1_maybe tok2_maybe
+             | tok1_maybe tok2_maybe TK3 S tok1_maybe tok2_maybe TK3 S tok1_maybe tok2_maybe;
+
+tok1_maybe ::= tok1_maybe TK1 S | ;
+
+tok2_maybe ::= tok2_maybe TK2 S | ;
+
+
+/// SIMULATION SECTION
+
+sim_sec ::= init_instr S cmd S cmd S cmd S | sim_sec cmd cmd;
+
+init_instr ::= INIT_WD heigth_ass_cmd CM speed_ass_cmd 
+             | INIT_WD speed_ass_cmd CM heigth_ass_cmd 
+             | INIT_WD speed_ass_cmd 
+             | INIT_WD heigth_ass_cmd 
+             | INIT_WD;
+
+cmd ::= heigth_ass_cmd | speed_ass_cmd | cond:comp {: RESULT = comp; :} ;
+
+heigth_ass_cmd ::= HEIGHT_WD EQ expr:res{:
+                    parser.HEIGHT=res;
+                    System.out.println("HEIGHT "+parser.HEIGHT);
+               :};
+
+speed_ass_cmd ::= SPEED_WD EQ expr:res{:
+                    parser.SPEED=res;
+                    System.out.println("SPEED "+parser.SPEED);
+               :};
+
+cond ::= COND_WD SO comparison:comp SC UPDATE_WD ass_l DONE;
+
+comparison ::= expr:x MAJ expr:y {: 
+                   if(x>y){
+                    RESULT=1;
+                   }
+                   else RESULT=0;
+               :}
+             | expr:x EQ expr:y {:
+                   if(x==y){
+                    RESULT=1;
+                   }
+                   else RESULT=0;
+             :}
+             | {: RESULT = 1; :} ;
+
+ass_l ::= NT0 height_ass_cmd_C S | NT0 speed_ass_cmd_C S | ass_l NT1 height_ass_cmd_C S | ass_l NT1 speed_ass_cmd_C S;
+
+height_ass_cmd_C ::= HEIGHT_WD EQ expr:e {: if((Integer)parser.stack(-3) == 1) { parser.HEIGHT = e; System.out.println("HEIGHT: " + parser.HEIGHT); } :} ;
+
+speed_ass_cmd_C	::=	SPEED_WD EQ expr:e {: if((Integer)parser.stack(-3) == 1) { parser.SPEED = e; System.out.println("SPEED: " + parser.SPEED); } :} ;
+
+NT0 ::= {: RESULT = (Integer)parser.stack(-2); :};
+
+NT1 ::= {: RESULT = (Integer)parser.stack(-3); :};
+
+expr ::= expr:x SUM expr:y {: RESULT = x+y; :}
+       | expr:x MUL expr:y {: RESULT = x*y; :}
+       | UINT:x {: RESULT = x; :}
+       | HEIGHT_WD {: RESULT = parser.HEIGHT; :} 
+       | SPEED_WD {: RESULT = parser.SPEED; :};
+
+

@@ -1,0 +1,178 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+
+parser code {:
+	public class Data{
+		public Integer w;
+		public Integer v;
+	
+	public Data(Integer w, Integer v){
+		this.w=w;
+		this.v=v;
+	}
+	
+	public void printD(){
+		print("WEIGHT="+this.w+" VOLUME="+this.v);
+	}
+	}
+	public class Cond{
+		public Integer val;
+		public Boolean flag;
+		public Data d;
+
+	public Cond(Integer val, Boolean flag, Data d){
+		this.val=val;
+		this.flag=flag;
+		this.d=d;
+	}
+
+	}
+
+	public void report_error(String message, Object info) {
+		StringBuffer m = new StringBuffer(message);
+		if (info instanceof Symbol) {
+			if (((Symbol)info).left != 1 && ((Symbol)info).right != 1) {
+				if (((Symbol)info).left != -1 && ((Symbol)info).right != -1) {
+					int line = (((Symbol)info).left) + 1;
+					int column = (((Symbol)info).right) + 1;
+					m.append(" (line " + line + " column " + column + ")");
+				}
+			}
+			System.err.println(m);
+		}
+	}
+
+	public Object stack(int position) {
+		return (((Symbol)stack.elementAt(tos + position)).value);
+	}
+
+	public void print(Object o){
+		System.out.println(o);
+	}
+:};
+
+action code {:
+	public HashMap<String, HashMap<String, Integer>> map = new HashMap<String, HashMap<String, Integer>>();
+
+:};
+
+//////////////////////////////////
+///// SYMBOLS DECLARATION
+/////////////////////////////////
+
+terminal String ID;
+terminal Integer INT;
+terminal BC, BO, CM, DOT, EQ, PLUS, RC, RO, S, SC, SO, STAR, SEP;
+terminal TOK1, TOK2, TOK3;
+terminal INIT, WEIGHT, VOLUME, G, KG, L, HL, FZ, MAX, MIN;
+terminal OBJECT, ATTRIBUTES, IF, MOD, ADD, SUB;
+
+non terminal prog, header;
+non terminal Integer expr;
+non terminal tok1;
+non terminal Data execution;
+non terminal Data init_;
+non terminal Integer weight, volume;
+non terminal Data commands, command;
+non terminal Integer fz;
+non terminal Integer[] exprl;
+non terminal Integer num;
+non terminal Data object;
+non terminal Cond if;
+non terminal HashMap<String, Integer> attrl;
+non terminal attr;
+non terminal Cond condl;
+non terminal Cond cond;
+non terminal Cond equal, range;
+non terminal Cond actionl;
+non terminal Cond action_;
+
+precedence left PLUS;
+precedence left STAR;
+
+start with prog;
+
+//////////////////////////////////
+///// GRAMMAR
+/////////////////////////////////
+
+prog ::= header SEP execution
+;
+
+header ::= tok1 TOK2 S tok1 TOK2 S tok1 TOK3 S tok1	
+			| tok1 TOK2 S tok1 TOK3 S tok1 TOK2 S tok1
+			| tok1 TOK3 S tok1 TOK2 S tok1 TOK2 S tok1;
+
+tok1 ::= | tok1 TOK1 S;
+
+/*********************/
+/* Execution Section */
+/*********************/
+execution ::= init_:d {: RESULT=d; print("WEIGHT="+RESULT.w+" VOLUME="+RESULT.v); :} commands
+	      | init_:d {: RESULT=d; print("WEIGHT="+RESULT.w+" VOLUME="+RESULT.v); :};
+
+init_ ::= INIT weight:w CM volume:v S {: RESULT=new Data(w,v);  :}
+		  | INIT volume:v CM weight:w S {: RESULT=new Data(w,v);   :}
+		  | INIT CM weight:w S {: RESULT=new Data(w,100);  :}
+		  | INIT volume:v CM S {: RESULT=new Data(100,v); :}
+		  | INIT  CM  S {: RESULT=new Data(100, 100); :}
+		  | INIT CM volume:v S {: RESULT=new Data(100,v);  :}
+		  | INIT weight:w CM S {: RESULT=new Data(w,100);  :}
+		 ;
+
+weight ::=    WEIGHT expr:res G {: RESULT=res; :}
+			| WEIGHT expr:res KG {: RESULT=(res*1000); :}; 
+
+volume ::= 	  VOLUME expr:res L {: RESULT=res; :}
+			| VOLUME expr:res HL {: RESULT=(res*100); :};
+
+commands ::= command:d1 {:RESULT=d1; :} command:d2 {: RESULT=d2; :}
+			 | commands command:d1 {:RESULT=d1; :} command:d2 {: RESULT=d2; :};
+
+command ::= object:d {: RESULT=d; :} | if:c {: RESULT=c.d; :};
+
+object ::= OBJECT ID:id ATTRIBUTES BO attrl:attr_map BC S {: map.put(id, attr_map); RESULT=(Data)parser.stack(-7);:};
+
+attrl ::= ID:id EQ expr:attr {:  HashMap<String, Integer> attr_map = new  HashMap<String, Integer>(); attr_map.put(id, attr); RESULT=attr_map; :} 
+		  | attrl:attr_map CM ID:id EQ expr:attr {: attr_map.put(id, attr); RESULT=attr_map; :} ;
+
+
+if ::= IF ID:var DOT ID:attr BO {: RESULT=new Cond(map.get(var).get(attr), false, (Data)parser.stack(-5)); :} condl:new_cond BC S {: RESULT=new_cond; :};
+
+condl ::= cond:c {: RESULT=c; :} | condl cond:c {: RESULT=c; :};
+
+cond ::= equal:c {: c.flag=false; RESULT=c; :} | range:c {: c.flag=false; RESULT=c; :};
+
+equal ::= EQ expr:e2 BO {: Cond c =(Cond)parser.stack(-3); if(c.val.equals(e2)) c.flag=true; RESULT=c; :} 
+	  actionl:new_cond BC {: RESULT=new_cond; :};
+
+range ::= SO expr:e1 CM expr:e2 SC BO {: Cond c =(Cond)parser.stack(-6); if(c.val>=e1 && c.val<=e2) c.flag=true;  		  RESULT=c;:} actionl:new_cond BC  {: RESULT=new_cond;:};
+
+actionl ::= action_:c {: RESULT=c; :} | actionl action_:c {: RESULT=c; :};
+
+action_ ::= MOD WEIGHT expr:v ADD S {: Cond c = (Cond)parser.stack(-5); if(c.flag){ c.d.w+=v; 
+		c.d.printD(); }	RESULT=c;:}
+	    | MOD WEIGHT expr:v SUB S {: Cond c = (Cond)parser.stack(-5); if(c.flag){ c.d.w-=v; 
+		c.d.printD(); } RESULT=c;:}
+	    | MOD VOLUME expr:v ADD S {: Cond c = (Cond)parser.stack(-5); if(c.flag){ c.d.v+=v; 
+		c.d.printD(); } RESULT=c;:}
+	    | MOD VOLUME expr:v SUB S {: Cond c = (Cond)parser.stack(-5); if(c.flag){ c.d.v-=v; 
+		c.d.printD(); } RESULT=c;:};
+
+
+
+fz ::= FZ RO MIN CM exprl:minmax RC {: RESULT=minmax[0]; :}
+		| FZ RO MAX CM exprl:minmax RC {: RESULT=minmax[1]; :};
+
+
+exprl ::= exprl:minmax CM expr:v {: if(minmax[0]>v) minmax[0]=v; else if(minmax[1]<v) minmax[1]=v; RESULT=minmax;:}
+		  | expr:v {: RESULT=new Integer[2]; RESULT[0]=v; RESULT[1]=v; :};
+
+expr ::= expr:e1 PLUS expr:e2 {:RESULT = e1 + e2;:}
+	| expr:e1 STAR expr:e2 {:RESULT = e1 * e2;:}
+	| num:n {:RESULT = n;:}
+	| fz:res {: RESULT=res; :};
+
+num ::= INT:i {:RESULT = i;:};

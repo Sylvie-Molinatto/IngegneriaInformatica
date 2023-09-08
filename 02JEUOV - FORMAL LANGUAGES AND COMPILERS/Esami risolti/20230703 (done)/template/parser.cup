@@ -1,0 +1,131 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, HashMap<String,Integer>>();
+:};
+
+parser code     {:
+    public HashMap<String, HashMap<String,Integer>> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+
+terminal TK1, TK2, TK3;
+terminal SEP, S, HOUSE, START, END, CM, IF, THEN, FI, AND, OR, NOT, RO, RC, EQEQ, DOT, PRINT;
+terminal String QSTRING;
+terminal Integer UINT;
+// terminal Double;
+
+
+non terminal PROG, header_sec, tok3_maybe, houses_sec, house, preferences_sec, if_cmd, print_l;
+non terminal Boolean bool_expr;
+non terminal HashMap<String, Integer> room_l;
+// non terminal Integer[];
+// non terminal Double;
+
+// PRECEDENCES AND ASSOCIATIVITIES
+
+// lower precedences
+
+precedence left OR;
+// precedence left OROR;
+precedence left AND;
+// precedence left ANDAND;
+precedence left NOT;
+// precedence left NOTEQ;
+// precedence left MIN, MAJ, MIN_EQ, EQ_MIN, MAJ_EQ, EQ_MAJ, EQ;
+// precedence left PLUS, MINUS;
+// precedence left STAR, DIV;
+// precedence left POW;
+// precedence left UMINUS;
+
+// higher precedences
+
+//////////////////////////////////////
+// Grammar start
+//////////////////////////////////////
+
+start with PROG;
+
+PROG::= header_sec SEP houses_sec SEP preferences_sec;
+
+/// HEADER SECTION ///
+
+header_sec ::= tok3_maybe TK1 tok3_maybe TK2 tok3_maybe | tok3_maybe TK2 tok3_maybe TK1 tok3_maybe;
+
+tok3_maybe ::= tok3_maybe TK3 | ;
+
+/// HOUSES SECTION ///
+
+houses_sec ::= house house | houses_sec house house;
+
+house ::= HOUSE QSTRING:type START room_l:tab END {:
+          parser.table.put(type, tab);
+:};
+
+room_l ::= room_l:tab CM QSTRING:name UINT:size {:
+                tab.put(name, size);
+                RESULT = tab;
+           :}
+           | QSTRING:name UINT:size {:
+                RESULT = new HashMap<String, Integer>();
+                RESULT.put(name, size);
+           :};
+
+/// PREFERENCES SECTION ///
+
+preferences_sec ::= preferences_sec if_cmd | ;
+
+if_cmd ::= IF bool_expr THEN print_l FI;
+
+bool_expr ::= bool_expr:x AND bool_expr:y {: RESULT = x&y; :}
+            | bool_expr:x OR bool_expr:y {: RESULT = x|y; :}
+            | NOT bool_expr:x {: RESULT = !x; :}
+            | RO bool_expr:x RC {: RESULT = x; :}
+            | QSTRING:type DOT QSTRING:name EQEQ UINT:size {:
+                 HashMap<String, Integer> tab = parser.table.get(type);
+                 Integer true_size = tab.get(name);
+                 if(true_size.equals(size)){
+                    RESULT = true;
+                 }
+                 else{
+                    RESULT = false;
+                 }
+            :};
+
+print_l ::= print_l PRINT QSTRING:s S {:
+                Boolean result = (Boolean) parser.stack(-5);
+                if(result==true){
+                    System.out.println(s);
+                }
+            :}
+            | PRINT QSTRING:s S {:
+                Boolean result = (Boolean) parser.stack(-4);
+                if(result==true){
+                    System.out.println(s);
+                }
+            :};
+
+
+

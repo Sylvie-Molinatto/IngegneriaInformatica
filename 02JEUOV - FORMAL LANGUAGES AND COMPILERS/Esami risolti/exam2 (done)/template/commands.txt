@@ -1,0 +1,6 @@
+jflex scanner.jflex
+java java_cup.Main parser.cup
+javac Yylex.java sym.java parser.java Main.java
+java Main inputfile.c
+
+

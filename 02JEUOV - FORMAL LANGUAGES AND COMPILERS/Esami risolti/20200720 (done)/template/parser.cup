@@ -1,0 +1,111 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, Integer>();
+:};
+
+parser code     {:
+    public HashMap<String, Integer> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+
+terminal TK1, TK2, COMPARE, WITH, END, PRINT;
+terminal SEP, S, EQ, PLUS, MINUS, STAR, DIV, RO, RC, BO, BC;
+terminal String  ID;
+terminal UMINUS;
+terminal Integer UINT;
+// terminal Double;
+
+
+non terminal PROG;
+non terminal header, commands, tk1_odd, tk2_3, tk2_21, tk1_maybe, command, comp_l, print_l;
+// non terminal HashMap;
+non terminal Integer NT0, expr;
+// non terminal Double;
+
+precedence left PLUS,MINUS;
+precedence left STAR,DIV;
+precedence left UMINUS;
+
+start with PROG;
+
+PROG ::= header SEP commands;
+
+/// HEADER SECTION ///
+
+header ::= tk1_odd tk2_3 | tk1_odd tk2_21 | TK2 S tk1_maybe TK2 S tk1_maybe TK2 S tk1_maybe ;
+
+tk1_odd ::= TK1 S TK1 S TK1 S TK1 S TK1 S | tk1_odd TK1 S TK1 S;
+
+tk2_3 ::= TK2 S TK2 S TK2 S;
+
+tk2_21 ::= tk2_3 tk2_3 tk2_3 tk2_3 tk2_3 tk2_3 tk2_3 ;
+
+tk1_maybe ::= tk1_maybe TK1 S | ;
+
+/// COMMANDS SECTION ///
+
+commands ::= commands command | ;
+
+command ::= ID:x EQ expr:y S {:
+              parser.table.put(x,y);
+            :}
+            | COMPARE expr WITH comp_l END S;
+
+expr ::= expr:x PLUS expr:y {: RESULT = x+y; :} 
+       | expr:x MINUS expr:y {: RESULT = x-y; :}
+       | expr:x STAR expr:y {: RESULT = x*y; :}
+       | expr:x DIV expr:y {: RESULT = x/y; :} 
+       | MINUS expr:x {: RESULT = -x; :}%prec UMINUS 
+       | RO expr:x RC {: RESULT = x; :}
+       | UINT:x {: RESULT = x; :} 
+       | ID:x {: RESULT = (Integer)parser.table.get(x); :}; 
+
+comp_l ::= NT0 expr BO print_l BC 
+           | comp_l expr BO print_l BC;
+
+NT0 ::= {: RESULT = 1; :};
+
+print_l ::= PRINT expr:x S{:
+              Integer first = (Integer)parser.stack(-7);
+              Integer second =  (Integer)parser.stack(-4);
+              if(first==second){
+                System.out.println(x);
+                RESULT=1;
+              }
+              else{
+                RESULT=0;
+              }
+            :} 
+            | print_l:r PRINT expr:x S{:
+               Integer doIt = (Integer) r;
+               if(doIt==1){
+                System.out.println(x);
+                RESULT=1;
+               }
+               else{
+                RESULT = 0;
+               }
+            :};

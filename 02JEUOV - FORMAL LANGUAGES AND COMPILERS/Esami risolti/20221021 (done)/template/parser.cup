@@ -1,0 +1,107 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, Boolean>();
+:};
+
+parser code     {:
+    public HashMap<String, Boolean> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:}
+
+
+terminal TK1, TK2, TK3;
+terminal S, SEP, EQ, CMP, WITH, SO, SC, PRINT, RO, RC, AND, OR, NOT, T, F, FZFUNCTION, CM;
+terminal String ID, QSTRING;
+// terminal Integer;
+// terminal Double;
+
+
+non terminal PROG, header_sec, tok1_tok3_maybe, command_sec, action_l, action_instr, more_command;
+non terminal Boolean bool_expr, bool_expr_l, cmd, NT0, NT1;
+// non terminal HashMap;
+// non terminal Integer[];
+// non terminal Double;
+
+precedence left AND, OR;
+precedence left NOT;
+
+start with PROG;
+
+PROG ::= header_sec SEP command_sec;
+
+header_sec ::= tok1_tok3_maybe | tok1_tok3_maybe TK2 S tok1_tok3_maybe 
+             | tok1_tok3_maybe TK2 S tok1_tok3_maybe TK2 S tok1_tok3_maybe TK2 S tok1_tok3_maybe TK2 S tok1_tok3_maybe;
+
+tok1_tok3_maybe ::= tok1_tok3_maybe TK1 S | tok1_tok3_maybe TK3 S | ;
+
+command_sec ::= cmd cmd more_command | ;
+
+more_command ::= more_command cmd cmd | cmd cmd;
+
+cmd ::= ID:id EQ bool_expr:x S{:
+           parser.table.put(id, x);
+           if(x==true){
+             System.out.println(id+" T");
+           }
+           else{
+            System.out.println(id+" F");
+           }
+          
+        :}
+        | CMP bool_expr:x action_l{:
+              RESULT = x;
+        :};
+
+action_l ::= NT0 action_instr | action_l NT1 action_instr;
+
+NT0 ::= {: RESULT = (Boolean) parser.stack(0); :};
+
+NT1 ::= {: RESULT = (Boolean) parser.stack(-1); :};
+
+action_instr ::= WITH bool_expr:x SO PRINT RO QSTRING:q RC S SC{:
+                    Boolean prev = (Boolean) parser.stack(-9);
+                    if(prev==x){
+                        System.out.println(q);
+                    }
+             :};
+
+bool_expr ::= bool_expr:x AND bool_expr:y {: RESULT = x&y; :}
+            | bool_expr:x OR bool_expr:y {: RESULT = x|y; :}
+            | NOT bool_expr:x {: RESULT = !x; :}
+            | RO bool_expr:x RC {: RESULT = x; :}
+            | T {: RESULT = true; :}
+            | F {: RESULT = false; :}
+            | ID:x {: RESULT = parser.table.get(x); :}
+            | FZFUNCTION RO bool_expr_l:x RC {: RESULT = x; :};
+
+bool_expr_l ::= bool_expr_l:prev CM bool_expr:current {:
+                     if(current==false){
+                        RESULT = false;
+                     }
+                     else {
+                        RESULT = true;
+                     }
+              :} 
+              | bool_expr:x {: RESULT = x; :};

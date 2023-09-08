@@ -1,0 +1,125 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, Boolean>();
+:};
+
+parser code     {:
+    public HashMap<String, Boolean> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+
+terminal TK1, TK2, TK3, EQ, EQUAL, TO, DO, WRITE, DONE, AND, OR, NOT, RO, RC;
+terminal SEP, S, TRUE, FALSE, ANDFUNCTION, CM;
+terminal String ID, QSTRING;
+// terminal Integer;
+// terminal Double;
+
+
+non terminal PROG, header_sec, tok1_tok3_maybe, command_sec, cmd, more_cmd, assignment, equal, actions_l, action_instr;
+// non terminal HashMap;
+// non terminal Integer[];
+non terminal Boolean bool_expr, bool_expr_l, NT0, NT1;
+
+// PRECEDENCES AND ASSOCIATIVITIES
+
+// lower precedences
+
+precedence left OR;
+// precedence left OROR;
+precedence left AND;
+// precedence left ANDAND;
+precedence left NOT;
+// precedence left NOTEQ;
+// precedence left MIN, MAJ, MIN_EQ, EQ_MIN, MAJ_EQ, EQ_MAJ, EQ;
+// precedence left PLUS, MINUS;
+// precedence left STAR, DIV;
+// precedence left POW;
+// precedence left UMINUS;
+
+// higher precedences
+
+//////////////////////////////////////
+// Grammar start
+//////////////////////////////////////
+
+start with PROG;
+
+PROG::= header_sec SEP command_sec;
+
+/// HEADER SECTION ///
+
+header_sec ::= tok1_tok3_maybe | tok1_tok3_maybe TK2 S tok1_tok3_maybe | tok1_tok3_maybe TK2 S tok1_tok3_maybe TK2 S tok1_tok3_maybe;
+
+tok1_tok3_maybe ::= tok1_tok3_maybe TK1 S | tok1_tok3_maybe TK3 S | ;
+
+/// COMMAND SECTION ///
+
+command_sec ::= cmd cmd more_cmd | ;
+
+more_cmd ::= more_cmd cmd cmd | cmd cmd;
+
+cmd ::= assignment | equal;
+
+assignment ::= ID:key EQ bool_expr:value S {:
+                 parser.table.put(key,value);
+                 System.out.println(key+" "+value);
+           :};
+
+equal ::= EQUAL bool_expr actions_l;
+
+bool_expr ::= bool_expr:x AND bool_expr:y {: RESULT = x&y; :}
+            | bool_expr:x OR bool_expr:y {: RESULT = x|y; :}
+            | NOT bool_expr:x {: RESULT = !x; :}
+            | RO bool_expr:x RC {: RESULT = x; :}
+            | TRUE {: RESULT = true; :}
+            | FALSE {: RESULT = false; :}
+            | ID:x {: RESULT = parser.table.get(x); :}
+            | ANDFUNCTION RO bool_expr_l:res RC {: RESULT=res; :};
+
+bool_expr_l ::= bool_expr_l:prev CM bool_expr:current {:
+                  if(current.equals(false)){
+                    RESULT = false;
+                  }
+                  else{
+                    RESULT = true;
+                  }
+              :}
+              | bool_expr:x{:
+                 RESULT = x;
+              :};
+
+actions_l ::= actions_l NT0 action_instr | NT1 action_instr;
+
+NT0 ::= {: RESULT = (Boolean) parser.stack(-1); :};
+
+NT1 ::= {: RESULT = (Boolean) parser.stack(0); :};
+
+action_instr ::= TO bool_expr:current DO WRITE QSTRING:s S DONE {:
+                   Boolean prev = (Boolean) parser.stack(-7);
+                   if(prev.equals(current)){
+                    System.out.println(s);
+                   }
+             :};

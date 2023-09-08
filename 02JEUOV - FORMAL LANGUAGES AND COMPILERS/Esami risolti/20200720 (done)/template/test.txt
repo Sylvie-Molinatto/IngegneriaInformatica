@@ -1,0 +1,6 @@
+(++ Header section (second type of grammar for the header) ++)
+07:13:24:101; (++ <token2> ++)
+08:13:10:11001; (++ <token2> ++)
+aabbccabc#-a; (++ <token1> ++)
+10:13:26:1000; (++ <token2> ++)
+$$

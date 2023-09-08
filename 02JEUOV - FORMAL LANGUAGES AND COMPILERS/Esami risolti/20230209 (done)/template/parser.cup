@@ -1,0 +1,130 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, HashMap<String, Double>>();
+:};
+
+parser code     {:
+    public HashMap<String, HashMap<String, Double>> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:}
+
+
+terminal TK1, TK2;
+terminal S, SEP, COL, SO, SC, EUROKG, CM, DOT, KG;
+terminal String QSTRING;
+terminal Integer UINT;
+terminal Double REAL;
+
+
+non terminal PROG, header_sec, tok2_maybe, food_sec, food_cat, 
+             recipes_sec, col_maybe;
+non terminal HashMap<String, Double> food_l;
+non terminal Integer NT0, NT1;
+non terminal Double ingr, ingr_l;
+
+// precedence left PLUS,MINUS;
+// precedence left STAR,DIV;
+
+start with PROG; 
+
+PROG ::= header_sec SEP food_sec SEP recipes_sec;
+
+
+/// HEADER SECTION ///
+
+header_sec ::= tok2_maybe TK1 S | TK1 S tok2_maybe | tok2_maybe TK1 S tok2_maybe | tok2_maybe TK1 S TK2 S 
+             | TK2 S TK1 S tok2_maybe | TK2 S TK1 S TK2 S;
+
+tok2_maybe ::= tok2_maybe TK2 S | TK2 S TK2 S ;
+
+/// FOOD SECTION ///
+
+food_sec ::= food_sec food_cat food_cat {:
+                  String min_food_name = "";
+                  Double min_price = Double.MAX_VALUE;
+                  String max_food_name = "";
+                  Double max_price = Double.MIN_VALUE;
+                  for(String s1 : parser.table.keySet()){
+                    HashMap<String,Double> tab = parser.table.get(s1);
+                    for(String s2 : tab.keySet()){
+                        Double price = tab.get(s2);
+                        if(price>max_price){
+                            max_price = price;
+                            max_food_name = s2;
+                        }
+                        if(price<min_price){
+                            min_price = price;
+                            min_food_name = s2;
+                        }
+                    }
+                  }
+
+                  System.out.printf("Less expensive: "+min_food_name+" %.2f EURO/kg\n", min_price);
+                  System.out.printf("More expensive: "+max_food_name+" %.2f EURO/kg\n", max_price);
+                  System.out.println("---");
+             :}
+             | ; 
+
+food_cat ::= QSTRING:cat_name COL SO food_l:tab SC S{:
+               parser.table.put(cat_name, tab);
+         :};
+
+food_l ::= QSTRING:food_name COL REAL:price EUROKG {:
+               RESULT = new HashMap<String,Double>();
+               RESULT.put(food_name, price);
+           :}
+           | food_l:tab CM QSTRING:food_name COL REAL:price EUROKG{:
+               tab.put(food_name, price);
+               RESULT = tab;
+           :};
+
+/// RECIPES SECTION ///
+
+recipes_sec ::= recipes_sec UINT:number QSTRING:recipe_name {: System.out.println(recipe_name); :} col_maybe ingr_l:price S {:
+                   System.out.printf("TOT: %.2f EURO\n",price);
+              :}
+              | ;
+
+col_maybe ::= COL | ;
+
+NT0 ::= {: RESULT = (Integer) parser.stack(-5); :};
+
+NT1 ::= {: RESULT = (Integer) parser.stack(-3); :};
+
+ingr_l ::= ingr_l:prev CM NT0 ingr:current {:
+              RESULT = current+prev;
+          :}
+          | NT1 ingr:price {:
+              RESULT = price;
+           :};
+
+ingr ::= QSTRING:cat_name DOT QSTRING:ingr_name REAL:weight KG{:
+     HashMap<String,Double> tab = parser.table.get(cat_name);
+     Double price_kg = tab.get(ingr_name);
+     Integer qty = (Integer) parser.stack(-5);
+     Double price = price_kg*weight*qty;
+     System.out.printf(ingr_name+" %.2f EURO\n", price);
+     RESULT = price;
+:};

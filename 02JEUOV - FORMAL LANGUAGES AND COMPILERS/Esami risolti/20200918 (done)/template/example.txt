@@ -1,0 +1,19 @@
+token3 ; {- tok3 -}
+name1.surname1@skenz.it/name2.surname2@abc.net; {- tok2 -}
+*abcfef-36xxyyxxyy ; {- tok1 -}
+token3; {- tok3 -}
+### {- division between header and command sections -}
+x1 = true;
+x2 = not true and not x1 ; {- false and false = false -}
+{- AND(true, true, true, false) or false = false or false = false -}
+x3 = AND(true, true, AND(true, x1), false ) or false;
+EQUAL true and false {- true and false = false -}
+TO false or false DO {- executed -}
+write "1";
+DONE
+TO x1 DO {- not executed -}
+write "2";
+DONE
+TO not x1 DO {- executed -}
+write "3";
+DONE

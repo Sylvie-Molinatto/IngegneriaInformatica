@@ -1,0 +1,9 @@
+mp3_list:
+256 Kb/s : TheShowMustGoOn_a12.mp3 150 , WeAreTheChampion1.mp3 120 , Time.mp3 30 ;
+128 Kb/s : TheUnforgiven.mp3 200 ;
+96 Kb/s: TheEnd.mp3 400 , NottePrimaDegliEsami.mp3 250 ;
+server:
+time: 00:59
+data:20/02/2006
+130.0.12.255 : TheEnd.mp3, Time.mp3, TheUnforgiven.mp3 ;
+130.0.12.254 : TheEnd.mp3 ;

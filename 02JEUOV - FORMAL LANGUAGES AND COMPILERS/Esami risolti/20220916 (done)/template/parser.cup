@@ -1,0 +1,137 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, HashMap<String, Double>>();
+:};
+
+parser code     {:
+    public HashMap<String, HashMap<String, Double>> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+
+terminal SEP, S, TK1, TK2, TK3, CM, COL;
+terminal String QSTRING, TO_WD, KM_WD, ELEVATION, METERS, ROUTE, KCAL;
+terminal Integer UINT;
+terminal Double REAL;
+
+non terminal prog, header, header1, header2, header3, nt1, dist_sec, dist, route_sec, command, elevation_cmd, route_cmd;
+non terminal HashMap pos_l;
+non terminal Integer[] places_l;
+non terminal Double pairs_l;
+
+// precedence left PLUS,MINUS;
+// precedence left STAR,DIV;
+
+start with prog;
+prog ::= header SEP dist_sec SEP route_sec;
+
+header ::= header1 | header2 | header3;
+
+header3 ::= header2 TK3 S nt1 TK3 S nt1 TK3 S nt1;
+
+header2 ::= header1 TK3 S nt1;
+
+header1 ::= nt1;
+
+nt1 ::= | TK1 S nt1 | TK2 S nt1;
+
+dist_sec ::= dist | dist_sec dist;
+
+dist ::= QSTRING:s pos_l:tab S {:
+              parser.table.put(s,tab);
+         :};
+
+pos_l ::= TO_WD QSTRING:s REAL:r KM_WD {:
+              HashMap<String,Double> tab = new HashMap<String,Double>();
+              tab.put(s,r);
+              RESULT = tab;
+          :}
+          | pos_l:tab CM TO_WD QSTRING:s REAL:r KM_WD{:
+              tab.put(s,r);
+              RESULT = tab;
+          :};
+
+route_sec ::= command command command command | route_sec command command;
+
+command ::= elevation_cmd | route_cmd;
+
+elevation_cmd ::= ELEVATION places_l:dist S {:
+                      System.out.println("ELEVATION "+dist[0]+" m");
+                  :};
+
+places_l ::= QSTRING UINT:u METERS {: /* 0 = current sum - 1 = last one preceding */
+                Integer[] dist = new Integer[2];
+                dist[0] = u;
+                dist[1] = u;
+                RESULT = dist;
+            :}
+            | places_l:dist CM QSTRING UINT:next METERS{:
+                dist[0] = dist[0] + (next-dist[1]);
+                dist[1] = next;
+                RESULT = dist;
+            :};
+
+route_cmd ::= ROUTE UINT KCAL COL pairs_l:tot S {:
+                System.out.println("Tot: "+tot+" kcal");
+            :}
+            | ROUTE UINT COL pairs_l:tot S{:
+                System.out.println("Tot: "+tot+" kcal");
+            :};
+
+pairs_l ::= QSTRING:a QSTRING:b REAL:mod {:
+                HashMap<String,Double> tab = (HashMap)parser.table.get(a);
+                Double distance = (Double) tab.get(b);
+                // System.out.println("parser.stack(0) - "+parser.stack(0));
+                if(!parser.stack(-4).equals(null) && !parser.stack(-4).equals("kcal/km")){ // SECOND RULE
+                    Integer current_cal = (Integer)parser.stack(-4);
+                    Double res = distance*((double)current_cal*mod);
+                    System.out.println(a+" "+b+" "+res+" kcal"); 
+                    RESULT = res;
+                }
+                else{ // FIRST RULE
+                    Integer current_cal = (Integer)parser.stack(-5);
+                    Double res = distance*((double)current_cal*mod);
+                    System.out.println(a+" "+b+" "+res+" kcal"); 
+                    RESULT = res;
+                }
+            :}
+            | pairs_l:res2 CM QSTRING:a QSTRING:b REAL:mod{:
+                HashMap<String,Double> tab = (HashMap)parser.table.get(a);
+                Double distance = (Double) tab.get(b);
+                 if(!parser.stack(-6).equals(null) && !parser.stack(-6).equals("kcal/km")){ // SECOND RULE
+                    Integer current_cal = (Integer)parser.stack(-6);
+                    Double res = distance*((double)current_cal*mod);
+                    System.out.println(a+" "+b+" "+res+" kcal"); 
+                    RESULT = res + res2;
+                }
+                else{ // FIRST RULE
+                    Integer current_cal = (Integer)parser.stack(-7);
+                    Double res = distance*((double)current_cal*mod);
+                    System.out.println(a+" "+b+" "+res+" kcal"); 
+                    RESULT = res + res2;
+                }
+
+            :};
+

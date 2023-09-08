@@ -1,0 +1,175 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    battery = new Double(0.00);
+    fuel = new Double(0.00);
+:};
+
+parser code     {:
+    public Double battery;
+    public Double fuel;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:}
+
+
+terminal S, CM, SEP, START, BATTERY, DASH, KWH, FUEL, LITERS, PLUS_WD, STAR_WD, 
+         MAX_WD, RO, RC, MOD, USE, DO, DONE, KM, UNITSKM;
+terminal TK1, TK2;
+// terminal String;
+// terminal Integer;
+terminal Double REAL;
+
+
+non terminal PROG, header_sec, tok2_maybe, run_sec;
+non terminal Integer power_type;
+// non terminal HashMap;
+non terminal Double[] start_instr, expr_l, command, command_l, cons_l, mod, use;
+non terminal Double battery_ass, fuel_ass, expr, max;
+
+precedence left PLUS_WD;
+precedence left STAR_WD;
+precedence left MAX_WD;
+
+start with PROG;
+
+PROG ::= header_sec SEP run_sec;
+
+/// HEADER SECTION ///
+
+header_sec ::= tok2_maybe | tok2_maybe TK1 S tok2_maybe TK1 S | tok2_maybe TK1 S tok2_maybe TK1 S tok2_maybe TK1 S tok2_maybe;
+
+tok2_maybe ::= tok2_maybe TK2 S | ;
+
+/// RUN SECTION ///
+
+run_sec ::= start_instr:s command_l;
+
+start_instr ::=  START battery_ass:b DASH fuel_ass:f S {: RESULT = new Double[2]; RESULT[0]=b; RESULT[1]=f; :}
+         | START fuel_ass:f DASH battery_ass:b S {: RESULT = new Double[2]; RESULT[0]=b; RESULT[1]=f; :}
+         | START battery_ass:b S {: RESULT = new Double[2]; RESULT[0]=b; RESULT[1]=100.00; :}
+         | START fuel_ass:f S {: RESULT = new Double[2]; RESULT[0]=100.00; RESULT[1]=f; :}
+         | START {: RESULT = new Double[2]; RESULT[0]=100.00; RESULT[1]=100.00; :};
+
+battery_ass ::= BATTERY expr:res KWH{:
+    RESULT = res;
+    System.out.print("battery="+res);
+:};
+
+fuel_ass ::= FUEL expr:res LITERS{:
+    RESULT = res;
+    System.out.println(" fuel="+res);
+:};
+
+expr ::= expr:x PLUS_WD expr:y {: RESULT = x+y; :}
+       | expr:x STAR_WD expr:y {: RESULT = x*y; :}
+       | REAL:x {: RESULT = x; :}
+       | max:x {: RESULT = x; :};
+
+max ::= MAX_WD RO expr_l:x RC {: 
+      RESULT = 0.0;
+      for(int i=0;i<x.length;i++){
+        if(x[i]>RESULT){
+            RESULT = x[i];
+        }
+      }
+:};
+
+expr_l ::= expr_l:list CM expr:current {:
+             RESULT = new Double[list.length+1];
+             for(int i=0;i<list.length;i++){
+                RESULT[i] = list[i];
+             }
+             RESULT[list.length]=current;
+         :} 
+         | expr:x {:
+             RESULT = new Double[]{x};
+         :};
+
+command_l ::= command command command command | command_l command command;
+
+command ::= mod:x S {: RESULT = x; :}| use:x S {: RESULT = x; :};
+
+mod ::= MOD power_type:p expr:x {:
+                if(p==0){
+                    Double[] prevArray = (Double[]) parser.stack(-3);
+                    Double[] newArray = new Double[2];
+                    newArray[0] = x + prevArray[0];
+                    newArray[1] = prevArray[1];
+                    System.out.println("battery="+newArray[0]+" fuel="+newArray[1]);
+                    RESULT = newArray;
+                }
+                else{
+                    Double[] prevArray = (Double[]) parser.stack(-3);
+                    Double[] newArray = new Double[2];
+                    newArray[0] = prevArray[0];
+                    newArray[1] = x + prevArray[1];
+                    System.out.println("battery="+newArray[0]+" fuel="+newArray[1]);
+                    RESULT = newArray;
+                }
+        :};
+
+use ::= USE power_type DO cons_l:x DONE {:
+                RESULT = x;
+        :};
+
+power_type ::= BATTERY {: RESULT = 0; :} 
+             | FUEL {: RESULT = 1; :};
+
+cons_l ::= expr:x KM expr:y UNITSKM S {:
+               Integer power_type = (Integer) parser.stack(-6); 
+               Double[] prevArray = (Double[]) parser.stack(-8);
+               Double[] newArray = new Double[2];
+               if(power_type==0){
+                  newArray[0] = prevArray[0] - (x*y);
+                  newArray[1] = prevArray[1];
+                  RESULT = newArray;
+                  System.out.println("battery="+newArray[0]+" fuel="+newArray[1]);
+               }
+               else{
+                  newArray[0] = prevArray[0];
+                  newArray[1] = prevArray[1] - (x*y);
+                  RESULT = newArray;
+                  System.out.println("battery="+newArray[0]+" fuel="+newArray[1]);
+               }
+          :}
+          | cons_l:prev expr:x KM expr:y UNITSKM S{:
+                Integer power_type = (Integer) parser.stack(-7);
+                Double[] newArray = new Double[2];
+                if(power_type==0){
+                  newArray[0] = prev[0] - (x*y);
+                  newArray[1] = prev[1];
+                  System.out.println("battery="+newArray[0]+" fuel="+newArray[1]);
+                  RESULT = newArray;
+               }
+               else{
+                  newArray[0] = prev[0];
+                  newArray[1] = prev[1] - (x*y);
+                  System.out.println("battery="+newArray[0]+" fuel="+newArray[1]);
+                  RESULT = newArray;
+               } 
+          :};
+        
+
+
+

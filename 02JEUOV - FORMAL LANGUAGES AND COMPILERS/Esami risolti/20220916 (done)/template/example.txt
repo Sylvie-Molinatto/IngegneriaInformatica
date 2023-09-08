@@ -1,0 +1,24 @@
+X_110*1011000+111*; (+- tok1 -+)
+Y_xxxyyy$xyzxyzxyzx#xxxyyy$xxxyyy$xxxyyy ; (+- tok2 -+)
+Z_2023/01/01 ; (+- tok3 -+)
+Y_xyzxyz#xxyyzzzy; (+- tok2 -+)
+==== (+- division between header and distance sections -+)
+"Biella" TO "Miagliano" 6.5 km,
+TO "Candelo" 5.9 km;
+"Miagliano" TO "Piedicavallo" 13.0 km,
+TO "Bielmonte" 24.0 km,
+TO "Sordevolo" 13.2 km,
+TO "Oropa" 15.2 km;
+"Candelo" TO "Miagliano" 11.7 km,
+TO "Viverone" 23.2 km,
+TO "Parco Burcina" 12.7 km,
+TO "Graglia" 16.6 km;
+==== (+- division between distance and route sections -+)
+(+- (537-400)+(1043-537)=137+506=643 -+)
+ELEVATION "Biella" 400 m, "Miagliano" 537 m, "Piedicavallo" 1043 m;
+(+- 6.5*15*1.1+13.0*15*1.2=107.25+234.0=341.25 kcal -+)
+ROUTE 15 : "Biella" "Miagliano" 1.1, "Miagliano" "Piedicavallo" 1.2;
+(+- (340-400)+(537-340)+(1186-537)=-60+197+649=786 -+)
+ELEVATION "Biella" 400 m, "Candelo" 340 m, "Miagliano" 537 m, "Oropa" 1186 m;
+(+- 5.9*20*0.9+11.7+20*1.1+15.2*20*1.4=106.2+33.7+425.6=565.50 -+)
+ROUTE 20 kcal/km : "Biella" "Candelo" 0.9, "Candelo" "Miagliano" 1.1, "Miagliano" "Oropa" 1.4;

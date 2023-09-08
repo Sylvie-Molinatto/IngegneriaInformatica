@@ -1,0 +1,5 @@
+token3 ; {- tok3 -}
+name1.surname1@skenz.it/name2.surname2@abc.net; {- tok2 -}
+*abcfef-36xxyyxxyy ; {- tok1 -}
+token3; {- tok3 -}
+### {- division between header and command sections -}

@@ -1,0 +1,149 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, HashMap<String, Double>>();
+:};
+
+parser code     {:
+    public HashMap<String, HashMap<String, Double>> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+
+terminal TK1, TK2, S, COL, SEP, BO, BC, CM, EURO_KG, EURO, KG;
+terminal String QSTRING;
+terminal Integer UINT;
+terminal Double REAL;
+
+
+non terminal PROG, header_sec, warehouse_sec, tok1_even, tok2_3, tok2_9, tok2_12, tok1_maybe,
+             material_type, products_sec, product, components_l;
+non terminal HashMap<String, Double> material_l;
+non terminal Object[] component;
+non terminal Double elements_l, NT0, NT1;
+non terminal String element;
+
+// precedence left PLUS,MINUS;
+// precedence left STAR,DIV;
+
+start with PROG;
+
+PROG ::= header_sec SEP warehouse_sec SEP products_sec;
+
+/// HEADER SECTION ///
+
+header_sec ::= tok1_even tok2_3 | tok1_even tok2_9 | tok1_even tok2_12
+         | TK2 S tok1_maybe TK2 S tok1_maybe | TK2 S tok1_maybe TK2 S tok1_maybe TK2 S tok1_maybe;
+
+tok1_even ::= TK1 S TK1 S TK1 S TK1 S | tok1_even TK1 S TK1 S;
+
+tok2_3 ::= TK2 S TK2 S TK2 S;
+
+tok2_9 ::= tok2_3 tok2_3 tok2_3;
+
+tok2_12 ::= tok2_3 tok2_3 tok2_3 tok2_3;
+
+tok1_maybe ::= tok1_maybe TK1 S | ;
+
+
+/// WAREHOUSE SECTION ///
+
+warehouse_sec ::= material_type material_type {:
+                   for(String s1 : table.keySet()){
+                    HashMap<String, Double> materials = table.get(s1);
+
+                    double minPrice = Double.MAX_VALUE;
+                    double maxPrice = Double.MIN_VALUE;
+                    String min = "";
+                    String max = "";
+                    for(String s2 : materials.keySet()){
+                        double price = materials.get(s2);
+                        if(price<minPrice){
+                            minPrice = price;
+                            min = s2;
+                        }
+                        if(price>maxPrice){
+                            maxPrice = price;
+                            max=s2;
+                        }
+                    }
+                    System.out.println(s1+": less: "+min+", more: "+max);
+                   }
+                    System.out.println("---");
+                :}
+                | warehouse_sec material_type material_type;
+
+material_type ::= BO material_l:tab BC QSTRING:mat_type_name S {:
+                    parser.table.put(mat_type_name,tab);
+                  :};
+
+material_l ::= material_l:tab CM QSTRING:mat_name REAL:price EURO_KG {:
+                   tab.put(mat_name, price);
+                   RESULT = tab;
+               :} 
+               | QSTRING:mat_name REAL:price EURO_KG {:
+                   RESULT = new HashMap<String,Double>();
+                   RESULT.put(mat_name, price);
+               :};
+
+///  PRODUCTS SECTION ///
+
+products_sec ::= products_sec product | ;
+
+product ::= REAL EURO QSTRING:prod_name {:System.out.println(prod_name);:} COL elements_l S;
+
+NT0 ::= {: RESULT = (Double) parser.stack(-6); :};
+
+NT1 ::= {: RESULT = (Double) parser.stack(-4); :};
+
+elements_l ::= elements_l CM NT0 element | NT1 element;
+
+element ::= QSTRING:x BO components_l:price BC {:
+       RESULT = x;
+:};
+
+components_l ::= components_l:stat CM component:r {:
+                    String name = (String) parser.stack(-4);
+                    HashMap<String, Double> map = parser.table.get(name);
+                    Double price = map.get(r[0].toString());
+                    Double weight = Double.parseDouble(r[1].toString());
+                    Double result = weight * price;
+                    Double price_add = (Double) parser.stack(-5);
+                    System.out.println(r[0] + " "+(result.doubleValue()+price_add.doubleValue())+" euro");
+                :}
+                | component:r {:
+                    String name = (String) parser.stack(-2);
+                    HashMap<String, Double> map = parser.table.get(name);
+                    Double price = map.get(r[0].toString());
+                    Double weight = Double.parseDouble(r[1].toString());
+                    Double result = weight * price;
+                    Double price_add = (Double) parser.stack(-3);
+                    System.out.println(r[0] + " "+(result.doubleValue()+price_add.doubleValue())+" euro");
+                :};
+
+component ::= QSTRING:comp_name UINT:weight KG{:
+    RESULT = new Object[2];
+    RESULT[0] = comp_name;
+    RESULT[1] = weight;
+:};

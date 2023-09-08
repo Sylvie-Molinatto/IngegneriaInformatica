@@ -1,0 +1,105 @@
+///////////////////////////////////
+/// Parser exam 07-02-2006 //////
+///////////////////////////////////
+
+import java_cup.runtime.*;
+import java.util.*;
+
+init with {:
+    symbol_table = new Hashtable<String,Integer>();
+:};
+
+parser code {:	
+    Integer totale=0;
+    public Hashtable<String,Integer> symbol_table;
+
+
+    public void report_error(String message, Object info) {
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol) {
+            if (((Symbol)info).left != 1 && ((Symbol)info).right != 1) {
+                if (((Symbol)info).left != -1 && ((Symbol)info).right != -1) {
+                    int line = (((Symbol)info).left)+1;
+                    int column = (((Symbol)info).right)+1;
+                    m.append(" (line "+line+", column "+column+")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+      
+terminal START, KBS, SERVER, TIME, DATA, S, CM, C, HOUR, DATE;
+terminal String SONG, IP;
+terminal Integer NUMBER;
+
+non terminal Integer songs_list;
+non terminal prog, prog_ok, mp3_list, mp3, song_list, data_time, user_list, user, ip;
+
+start with prog;
+
+prog ::= prog_ok {: System.out.print("Syntax Correct\n"); :}
+ | error {: parser.report_error("",null); :}
+;
+
+prog_ok ::= START C mp3_list SERVER C data_time user_list
+;
+
+mp3_list ::= mp3 | mp3_list mp3
+;
+
+mp3 ::= NUMBER KBS C song_list S
+;
+
+song_list ::= SONG:title NUMBER:length 
+{: 
+ Integer rate = (Integer) parser.stack(-4);
+   parser.symbol_table.put(title, length*rate); 
+:} 
+| song_list CM SONG:title NUMBER:length 
+{: 
+    Integer rate = (Integer) parser.stack(-6);
+   parser.symbol_table.put(title, length*rate); 
+:}
+;
+
+
+
+
+data_time ::= TIME C HOUR DATA C DATE {: System.out.println("OUTPUT:"); :} 
+          | DATA C DATE TIME C HOUR {: System.out.println("OUTPUT:"); :} 
+;
+
+user_list ::=  | user_list user
+;
+
+
+user ::= ip C songs_list:x S
+{: 
+   System.out.println("TOTAL: " + x);
+:}
+;
+
+ip ::= IP:ip {: System.out.println(ip); :};
+
+songs_list ::= SONG:song_title 
+{: 
+   Integer length= (Integer)parser.symbol_table.get(song_title);
+   System.out.println(song_title + " " + length);
+   RESULT = length;
+:} 
+| songs_list:x CM SONG:song_title
+{: 
+   Integer length= (Integer)parser.symbol_table.get(song_title);
+   System.out.println(song_title + " " + length);
+   RESULT = length + x;
+:} 
+;
+

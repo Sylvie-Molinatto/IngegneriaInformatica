@@ -1,0 +1,145 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, HashMap<String, Double>>();
+:};
+
+parser code     {:
+    public HashMap<String, HashMap<String, Double>> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+terminal TK1, TK2, TK3;
+terminal SEP, S, DASH, EURO, CM, PERCENT;
+terminal String QSTRING;
+terminal Integer UINT;
+terminal Double REAL;
+
+
+non terminal PROG, header_sec, tok1_3odd, tok1_tok3_maybe, tok2_3, tok2_9, tok2_10, dresses_sec, 
+             clothes_l, dress, purch_cmd_l, shopping_sec;
+non terminal HashMap <String, Double> prod_l;
+non terminal Object[] cmd, NT0, NT1, prod, purch_prod_l;
+// non terminal Double;
+
+// PRECEDENCES AND ASSOCIATIVITIES
+
+// lower precedences
+
+// precedence left OR;
+// precedence left OROR;
+// precedence left AND;
+// precedence left ANDAND;
+// precedence left NOT;
+// precedence left NOTEQ;
+// precedence left MIN, MAJ, MIN_EQ, EQ_MIN, MAJ_EQ, EQ_MAJ, EQ;
+// precedence left PLUS, MINUS;
+// precedence left STAR, DIV;
+// precedence left POW;
+// precedence left UMINUS;
+
+// higher precedences
+
+//////////////////////////////////////
+// Grammar start
+//////////////////////////////////////
+
+start with PROG;
+
+PROG::= header_sec SEP dresses_sec SEP shopping_sec;
+
+/// HEADER SECTION ///
+
+header_sec ::= tok1_3odd tok2_3 | tok1_3odd tok2_9 | tok1_3odd tok2_10 | TK2 S tok1_tok3_maybe | TK2 S tok1_tok3_maybe TK2 S tok1_tok3_maybe;
+
+tok1_3odd ::= TK1 S TK1 S TK1 S | tok1_3odd TK1 S TK1 S;
+
+tok2_3 ::= TK2 S TK2 S TK2 S ; 
+
+tok2_9 ::= tok2_3 tok2_3 tok2_3;
+
+tok2_10 ::= tok2_3 tok2_3 tok2_3 TK2 S;
+
+tok1_tok3_maybe ::= tok1_tok3_maybe TK1 S | tok1_tok3_maybe TK3 S | ;
+
+/// DRESSES SECTION ///
+
+dresses_sec ::= clothes_l;
+
+clothes_l ::= dress dress dress | clothes_l dress dress;
+
+dress ::= QSTRING:key DASH prod_l:value S{:
+       parser.table.put(key,value);
+:};
+
+prod_l ::= prod_l:tab CM UINT QSTRING:key REAL:value EURO {:
+                tab.put(key, value);
+                RESULT = tab;
+         :}
+          | UINT QSTRING:key REAL:value EURO{:
+                 RESULT = new HashMap<String, Double>();
+                 RESULT.put(key, value);
+          :};
+
+
+
+/// SHOPPING SECTION ///
+
+shopping_sec ::= purch_cmd_l;
+
+purch_cmd_l ::= purch_cmd_l cmd | cmd;
+
+cmd ::= QSTRING:dress_name {: System.out.println(dress_name); :} UINT:perc PERCENT DASH purch_prod_l:res S{:
+          RESULT = new Object[]{dress_name, perc};
+          System.out.println("TOTAL: "+res[0]+" euro N_PROD: "+res[1]);
+    :};
+
+purch_prod_l ::= purch_prod_l:prev CM NT0 prod:cur {:
+            Double tot_price = (Double) prev[0] + (Double) cur[0];
+            Integer tot_qty = (Integer) prev[1] + (Integer) cur[1];
+            RESULT = new Object[]{tot_price, tot_qty};
+:}
+               | NT1 prod:p{:
+                    RESULT = p;
+               :};
+
+NT0 ::= {: RESULT = new Object[2]; RESULT[0] = (String) parser.stack(-6); RESULT[1] = (Integer) parser.stack(-4); :};
+
+NT1 ::= {: RESULT = new Object[2]; RESULT[0] = (String) parser.stack(-4); RESULT[1] = (Integer) parser.stack(-2); :};
+
+prod ::= QSTRING:prod_name UINT:qty{:
+        Object[] result = (Object[]) parser.stack(-2);
+
+        HashMap<String,Double> tab = parser.table.get(result[0]);
+
+        Double price = tab.get(prod_name);
+
+        Integer discount = (Integer) result[1];
+
+        Double res = qty*(price - (100-discount)*price/100);
+
+        System.out.println(prod_name+" "+res+" euro");
+
+        RESULT = new Object[]{res, qty};
+:};

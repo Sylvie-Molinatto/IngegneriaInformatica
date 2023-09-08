@@ -1,0 +1,24 @@
+// Header section
+%%%%%-31; // <token1>
+$10111; // <token3>
+???**???45; // <token1>
+2015/12/25+2016/02/28; // <token2>
+####
+// Cars section
+"CAR_A" {
+"curve_1" = 10 m/s,
+"straight_1" = 50 m/s,
+"curve_2" = 20 m/s,
+"straight_2" = 60 m/s,
+"curve_3" = 15 m/s,
+"straight_3" = 80 m/s
+}
+"CAR_B" {
+"curve_1" = 5 m/s,
+"straight_1" = 80 m/s,
+"curve_2" = 20 m/s,
+"straight_2" = 75 m/s,
+"curve_3" = 10 m/s,
+"straight_3" = 80 m/s
+}
+######

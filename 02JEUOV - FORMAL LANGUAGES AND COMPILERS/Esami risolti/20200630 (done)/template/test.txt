@@ -1,0 +1,5 @@
+2020/02/29?10:30*22:00$22:30*23:00*23:30; ((-- tok1 --))
+!-8 ; ((-- tok2 --))
+!xxxxyyxxaaaayy ; ((-- tok2 --))
+2020/07/02?12:00*12:30*13:00; ((-- tok1 --))
+%%% ((-- division between header and execution sections --))

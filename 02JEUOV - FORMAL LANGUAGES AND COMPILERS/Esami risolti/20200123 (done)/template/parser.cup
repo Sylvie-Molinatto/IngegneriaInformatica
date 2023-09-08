@@ -1,0 +1,175 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String,HashMap<String,Integer>>();
+:};
+
+parser code     {:
+
+    HashMap<String, HashMap<String,Integer>> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+
+terminal TK1, TK2, TK3;
+terminal SEP, S, INIT, WEIGHT, CM, GRAMS, KILOGRAMS, VOLUME, LITERS, HECTOLITERS, PLUS, STAR, RO, RC, MIN, MAX,
+         OBJECT, ATTRIBUTES, DOT, EQ, BO, BC, SO, SC, MOD, ADD, SUB, FZ, IF;
+terminal String ID;
+terminal Integer UINT;
+// terminal Double;
+
+
+non terminal PROG, header_sec, tok1_maybe, execution_sec, init_instr, commands_l,
+             attribute, attributes_l, cond, type, actions_l, action_instr, command, cond_l, modifier;
+non terminal Integer w_unit, v_unit, expr, weight, volume;
+non terminal Integer[] expr_l;
+// non terminal Double;
+
+// PRECEDENCES AND ASSOCIATIVITIES
+
+// lower precedences
+
+// precedence left OR;
+// precedence left OROR;
+// precedence left AND;
+// precedence left ANDAND;
+// precedence left NOT;
+// precedence left NOTEQ;
+// precedence left MIN, MAJ, MIN_EQ, EQ_MIN, MAJ_EQ, EQ_MAJ, EQ;
+precedence left PLUS; //MINUS;
+precedence left STAR; //DIV;
+// precedence left POW;
+// precedence left UMINUS;
+
+// higher precedences
+
+//////////////////////////////////////
+// Grammar start
+//////////////////////////////////////
+
+start with PROG;
+
+PROG::= header_sec SEP execution_sec;
+
+
+/// HEADER SECTION ///
+
+header_sec ::= tok1_maybe TK2 S tok1_maybe TK2 S tok1_maybe TK3 S tok1_maybe
+             | tok1_maybe TK2 S tok1_maybe TK3 S tok1_maybe TK2 S tok1_maybe
+             | tok1_maybe TK3 S tok1_maybe TK2 S tok1_maybe TK2 S tok1_maybe;
+
+tok1_maybe ::= tok1_maybe TK1 S | ;
+
+
+/// EXECUTION SECTION ///
+
+execution_sec ::= init_instr commands_l;
+
+init_instr ::= INIT weight:w CM volume:v S {: System.out.println("WEIGHT="+w+" VOLUME="+v); :}
+             | INIT volume:v CM weight:w S {: System.out.println("WEIGHT="+w+" VOLUME="+v); :}
+             | INIT volume:v S {: System.out.println("WEIGHT=100 VOLUME="+v); :} 
+             | INIT weight:w S {: System.out.println("WEIGHT="+w+" VOLUME=100"); :}
+             | ;
+
+weight ::= WEIGHT expr:e w_unit:u{:
+           if(u.equals(0)){
+             RESULT = e;
+           }
+           else{
+            RESULT = e*100;
+           }
+       :};
+
+w_unit ::= GRAMS {: RESULT = 0; :}
+         | KILOGRAMS {: RESULT = 1; :};
+
+volume ::= VOLUME expr:e v_unit:u{:
+            if(u.equals(0)){
+                RESULT = e;
+            }
+            else{
+                RESULT = 100*e;
+            }
+       :};
+
+v_unit ::= LITERS {: RESULT = 0; :}
+         | HECTOLITERS {: RESULT = 1; :};
+
+commands_l ::= commands_l command command | ;
+
+expr ::= expr:x PLUS expr:y {: RESULT = x+y; :} 
+       | expr:x STAR expr:y {: RESULT = x*y; :}
+       | UINT:x {: RESULT = x; :}
+       | FZ RO MIN CM expr_l:x RC {:
+           RESULT = Integer.MAX_VALUE;
+           for(int i=0; i<x.length; i++){
+            if(x[i]<RESULT){
+                RESULT = x[i];
+            }
+           }
+       :}
+       | FZ RO MAX CM expr_l:x RC{:
+           RESULT = Integer.MIN_VALUE;
+           for(int i=0; i<x.length; i++){
+            if(x[i]>RESULT){
+                RESULT = x[i];
+            }
+           }
+       :};
+
+expr_l ::= expr_l:prev CM expr:cur {:
+            RESULT = new Integer[prev.length+1];
+            for(int i=0; i<prev.length; i++){
+                RESULT[i] = prev[i];
+            }
+            RESULT[prev.length] = cur;
+         :}
+         | expr:x {:
+            RESULT = new Integer[]{x};
+         :};
+
+command ::= OBJECT ID:name ATTRIBUTES BO attributes_l BC S {:
+              
+          :}
+          | IF ID DOT ID BO cond_l BC S;
+
+attributes_l ::= attributes_l CM attribute:x | attribute;
+
+attribute ::= ID:x EQ expr:y{:
+               RESULT = new Object[]{x,y};
+
+          :};
+
+cond_l ::= cond_l cond | cond;
+
+cond ::= type BO actions_l BC;
+
+type ::= EQ expr | SO expr CM expr SC;
+
+actions_l ::= actions_l action_instr | action_instr;
+
+action_instr ::= MOD WEIGHT expr modifier S
+         | MOD VOLUME expr modifier S;
+
+modifier ::= ADD | SUB;

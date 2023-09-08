@@ -1,0 +1,23 @@
+?-19 ;                [[- tok2 -]]
+$Feb./29/2020:11:00;  [[- tok3 -]]
+?LANGUAGE+-+-+ ;      [[- tok2 -]]
+3A22*2fa3%123abcD ;   [[- tok1 -]]
+####   [[- division between header and execution sections -]]
+INIT WEIGHT 320+30 g, VOLUME 3 hl ;
+[[- OUTPUT: WEIGHT=350 VOLUME=300 -]]
+
+[[- Other possibilities -]]
+[[- INIT VOLUME 2 hl , ;   WEIGHT=100 VOLUME=200 -]]
+[[- INIT , ;               WEIGHT=100 VOLUME=100 -]]
+
+OBJECT obj1 ATTRIBUTES { x=3+2*2, y=FZ(MIN,5,10)+1, z=1+FZ(MIN, 2+1, 3, FZ(MAX, 0, 1) )  };
+
+IF obj1.y {           [[- obj1.y=6 -]]
+  = FZ(MAX,1,2,3) {   [[- FALSE: obj1.y=6 NOT EQUAL TO FZ(MAX,1,2,3)=3 -]]
+    MOD WEIGHT 3 ADD; }
+  [ 1+1 , 3*2 ] {     [[- TRUE obj1.x=6, in interval [2, 6] -]]
+    MOD VOLUME 20*FZ(MAX, 0, 2) SUB; [[- OUTPUT: WEIGHT=350 VOLUME=260 -]]
+    MOD WEIGHT 50 SUB;               [[- OUTPUT: WEIGHT=300 VOLUME=260 -]]
+    MOD VOLUME 10 ADD;               [[- OUTPUT: WEIGHT=350 VOLUME=270 -]]
+  }
+};

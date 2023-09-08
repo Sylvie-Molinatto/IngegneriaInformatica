@@ -1,0 +1,155 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, HashMap<String, Integer>>();
+    System.out.println("Achieved scores.\n");
+:};
+
+
+parser code     {:
+    public HashMap<String, HashMap<String, Integer>> table;
+
+    /*
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+    */
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+action code {:
+    class Attrib {
+        private String name;
+        private Integer weight;
+        
+        Attrib(String name, Integer weight){
+            this.name = name;
+            this.weight = weight;
+        }
+	
+        String getName(){
+            return this.name;
+        }
+        Integer getWeight(){
+            return this.weight;
+        }
+
+    };
+:};
+
+
+terminal DOT, CM, S, COL, RO, RC, EQ, PLUS, MINUS, STAR, DIV, ARROW;
+terminal String WORD, ID;
+terminal Integer UINT;
+// terminal Double;
+
+
+non terminal PROG, type_definitions, prod_descriptions, type_def, prod_descr, sentence;
+non terminal Attrib attribute;
+non terminal HashMap<String,Integer> attributes_l;
+non terminal Integer valutation, operator, scores;
+non terminal String NT0, sentence_elem, ident;
+
+
+//////////////////////////////////////
+// Grammar start
+//////////////////////////////////////
+
+start with PROG;
+
+PROG ::= type_definitions DOT prod_descriptions ;
+
+/////////////////////////////////////////////////////////
+//DEFINITIONS
+/////////////////////////////////////////////////////////
+
+type_definitions ::= type_definitions type_def | type_def;
+
+type_def ::=  RO attributes_l:x RC ARROW ident:type_name{:
+       parser.table.put(type_name,x);
+:};
+
+attributes_l ::= attributes_l:att_l CM attribute:att {:
+                    att_l.put(att.getName(), att.getWeight());
+                    RESULT = att_l;
+               :}
+               | attribute:att{:
+                    HashMap<String,Integer> tab = new HashMap<String,Integer>();
+                    tab.put(att.getName(), (Integer) att.getWeight());
+                    RESULT = tab;
+               :};
+
+attribute ::= ident:att_name COL UINT:att_value{:
+       RESULT = new Attrib(att_name, att_value);
+:};
+
+/////////////////////////////////////////////////////////
+//DESCRIPTIONS
+/////////////////////////////////////////////////////////
+
+prod_descriptions ::= prod_descriptions prod_descr | ;
+
+prod_descr ::= ident COL scores:score EQ sentence S{:
+     System.out.println(", "+score);
+:};
+
+scores ::= scores:val1 NT0 CM valutation:val2 {:
+                RESULT = new Integer(val1.intValue() + val2.intValue());
+           :};
+
+NT0 ::= {: RESULT = (String)parser.stack(-2); :};
+
+scores ::= valutation:val{:
+               RESULT = val;
+           :};
+
+valutation ::= operator:op ident:att_name{:
+      String type = (String)parser.stack(-3);
+      HashMap<String,Integer> tab = parser.table.get(type);
+      Integer weight = (Integer)tab.get(att_name);
+      RESULT = new Integer(op.intValue() * weight.intValue());
+:};
+
+operator ::= PLUS {: RESULT = new Integer(2); :}
+           | MINUS {: RESULT = new Integer(0); :}
+           | STAR {: RESULT = new Integer(3); :}
+           | DIV {: RESULT = new Integer(1); :};
+
+
+////////////////////////////////////////////////////////////////
+/////// ELEMENTARY GRAMMAR
+////////////////////////////////////////////////////////////////
+
+sentence ::= sentence sentence_elem:name{:
+                    System.out.print(" "+name);  
+             :} 
+             | sentence_elem:name{:
+                    System.out.print(name);
+             :};
+
+sentence_elem ::= WORD:name {:
+                    RESULT = name;
+                  :} 
+                  | UINT:num {:
+                    RESULT = num.toString();
+                  :};
+
+ident ::= ID:a {: RESULT = a; :}
+        | WORD:a {: RESULT = a; :}; 

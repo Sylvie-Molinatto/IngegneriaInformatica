@@ -1,0 +1,12 @@
+08:34:10; <* tk3 *>
+2023/09/07; <* tk2 *>
+10:12; <* tk3 *>
+!!!!!!-12; <* tk1 *>
+$$$$$
+house "three-room" start
+"kitchen" 10, "living" 12, "bedroom" 8, "bathroom" 3
+end
+house "one-room" start
+"kitchen-bedroom" 13, "bathroom" 2
+end
+$$$

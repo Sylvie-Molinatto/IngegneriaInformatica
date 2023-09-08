@@ -1,0 +1,109 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String, Boolean>();
+:};
+
+parser code     {:
+    public HashMap<String, Boolean> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:}
+
+
+terminal TK1, TK2, TK3, S, SEP, EQ, AND, OR, NOT, RO, RC, TRUE, FALSE, IF, FI, DO, PRINT, DONE, AND_WORD, OR_WORD;
+terminal String ID, QSTRING;
+// terminal Integer;
+// terminal Double;
+
+
+non terminal PROG, header, tok2_odd, tok13, tok1_or_tok3, tok1_or_tok3_3, tok1_tok2_maybe,
+             execution, cmd_l, cmd, ass_cmd, comp_l, comp, print;
+// non terminal ;
+// non terminal HashMap;
+// non terminal Integer[];
+non terminal Boolean bool_expr, if_cmd, NT0, NT1;
+
+precedence left AND, OR;
+precedence left NOT;
+
+start with PROG;
+
+PROG ::= header SEP execution;
+
+header ::= tok2_odd tok13 | TK3 S tok1_tok2_maybe TK3 S tok1_tok2_maybe TK3 S tok1_tok2_maybe;
+
+/// HEADER SECTION ///
+
+tok2_odd ::= TK2 S TK2 S TK2 S | tok2_odd TK2 S TK2 S;
+
+tok13 ::= tok1_or_tok3 tok1_or_tok3 | tok1_or_tok3_3 | tok1_or_tok3_3 tok1_or_tok3_3 tok1_or_tok3_3;
+
+tok1_or_tok3 ::= TK1 S | TK3 S;
+
+tok1_or_tok3_3 ::= tok1_or_tok3 tok1_or_tok3 tok1_or_tok3;
+
+tok1_tok2_maybe ::= tok1_tok2_maybe TK1 S | tok1_tok2_maybe TK2 S |  ;
+
+
+/// EXECUTION SECTION ///
+
+execution ::= cmd_l ;
+
+cmd_l ::= cmd cmd cmd cmd cmd | cmd_l cmd cmd;
+
+cmd ::= ass_cmd | if_cmd;
+
+ass_cmd ::= ID:name EQ bool_expr:res S{:
+     parser.table.put(name, res);
+     //System.out.println(name+" "+res);
+:};
+
+bool_expr ::= bool_expr:x AND bool_expr:y {: RESULT = x&y; :} 
+            | bool_expr:x OR bool_expr:y {: RESULT = x|y; :}
+            | NOT bool_expr:x {: RESULT = !x; :}
+            | RO bool_expr:x RC {: RESULT=x; :}
+            | ID:x {: RESULT = parser.table.get(x); :}
+            | TRUE {: RESULT = true; :}
+            | FALSE {: RESULT = false; :};
+
+if_cmd ::= IF bool_expr:x comp_l FI{: RESULT = x;:};
+
+NT0 ::= {: RESULT = (Boolean) parser.stack(0); :};
+ 
+NT1 ::= {: RESULT = (Boolean) parser.stack(-1); :};
+
+comp_l ::= NT0 comp | comp_l NT1 comp;
+
+comp ::= OR_WORD bool_expr:x DO PRINT QSTRING:s S DONE {:
+           Boolean y = (Boolean) parser.stack(-7);
+           if(x||y){
+            System.out.println(s);
+           }
+       :}
+       | AND_WORD bool_expr:x DO PRINT QSTRING:s S DONE{:
+           Boolean y = (Boolean) parser.stack(-7);
+           if(x && y){
+            System.out.println(s);
+           }
+       :};

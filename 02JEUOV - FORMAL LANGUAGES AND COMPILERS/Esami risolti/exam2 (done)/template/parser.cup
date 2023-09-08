@@ -1,0 +1,112 @@
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.*;
+
+init with{:
+    table = new HashMap<String,Integer>();
+:};
+
+parser code     {:
+    public HashMap<String, Integer> table;
+
+    public void report_error(String message, Object info){
+        StringBuffer m = new StringBuffer(message);
+        if (info instanceof Symbol){
+            if(((Symbol)info).left != 1 && ((Symbol)info).right != 1){
+                if(((Symbol)info).left != -1 && ((Symbol)info).right != -1){
+                    int line = (((Symbol)info).left) + 1;
+                    int column = (((Symbol)info).right) + 1;
+                    m.append("(line" + line + "column " + column + ")");
+                }
+            }
+            System.err.println(m);
+        }
+    }
+
+     // Return semantic value of symbol in position (position)
+    public Object stack(int position) {
+        return (((Symbol)stack.elementAt(tos+position)).value);
+    }
+
+:};
+
+
+terminal MP3LIST, SERVER, CM, S, COL, KBITSEC, DATA_WD, TIME_WD;
+terminal String FILENAME, DATE, TIME, IP;
+terminal Integer UINT;
+// terminal Double;
+
+
+non terminal PROG, first_sec, second_sec, files_l, file, users_l, user;
+non terminal Integer bitrate_l, NT0, NT1, files_list_2;
+// non terminal Integer[];
+// non terminal Double;
+
+// PRECEDENCES AND ASSOCIATIVITIES
+
+// lower precedences
+
+// precedence left OR;
+// precedence left OROR;
+// precedence left AND;
+// precedence left ANDAND;
+// precedence left NOT;
+// precedence left NOTEQ;
+// precedence left MIN, MAJ, MIN_EQ, EQ_MIN, MAJ_EQ, EQ_MAJ, EQ;
+// precedence left PLUS, MINUS;
+// precedence left STAR, DIV;
+// precedence left POW;
+// precedence left UMINUS;
+
+// higher precedences
+
+//////////////////////////////////////
+// Grammar start
+//////////////////////////////////////
+
+start with PROG;
+
+PROG ::= first_sec second_sec;
+
+/// FIRST SECTION ///
+
+first_sec ::= MP3LIST bitrate_l {:System.out.println("OUTPUT: ");:};
+
+bitrate_l ::= UINT:kbit KBITSEC COL files_l S {:
+                 RESULT = kbit;
+              :}
+              | bitrate_l UINT:kbit KBITSEC COL files_l S {:
+                 RESULT = kbit;
+              :};
+
+files_l ::= files_l CM NT0 file | NT1 file;
+
+NT0 ::= {: RESULT = (Integer) parser.stack(-4); :};
+
+NT1 ::= {: RESULT = (Integer) parser.stack(-2); :};
+
+file ::= FILENAME:name UINT:duration {:
+          Integer bitrate = (Integer) parser.stack(-2);
+          Integer bits = bitrate.intValue() * duration.intValue();
+          parser.table.put(name, bits);
+     :};
+
+/// SECOND SECTION ///
+
+second_sec ::= SERVER DATA_WD DATE TIME_WD TIME users_l | SERVER TIME_WD TIME DATA_WD DATE users_l;
+
+users_l ::= users_l user | ;
+
+user ::= IP:x{: System.out.println(x); :} COL files_list_2:res {: System.out.println("TOTALE: "+res);:} S;
+
+files_list_2 ::= files_list_2:prev CM FILENAME:name {:
+                    Integer bits = parser.table.get(name);
+                    System.out.println(name+" "+bits);
+                    RESULT = bits+prev;
+                :}
+                | FILENAME:name {:
+
+                    Integer bits = parser.table.get(name);
+                    System.out.println(name+" "+bits);
+                    RESULT = bits;
+                :};

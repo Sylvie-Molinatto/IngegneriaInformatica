@@ -1,0 +1,9 @@
+// Definition of the product types: 
+( taste : 12, perfume: 8 ) -> wine
+( taste : 10, transparency: 2 ) -> honey 
+.
+// Description of the products: 
+wine: * taste, + perfume = barbera DOC;
+wine: * taste, * perfume = barolo di annata; 
+wine: - taste, / perfume = a stinky wine;
+honey: * taste, * transparency = acacia honey;

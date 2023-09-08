@@ -1,0 +1,6 @@
+I_28/02/2022:08:10; +-- tok1 --+
+K_hellooo0011001101 ; +-- tok3 --+
+I_20/10/2021 ; +-- tok1 --+
+K_hello ; +-- tok3 --+
+J_3b*3B+3C-aaa-123+9a+99+9B; +-- tok2 --+
+==== +-- division between header and simulation sections --+
