@@ -1,0 +1,3 @@
+C:/Users/ASUS/Documents/POLI/MAGISTRALE/I ANNO/PROGRAMMAZIONE DI SISTEMA/Programmazione/Laboratori/Lab2/esercizio1_c/cmake-build-debug/CMakeFiles/esercizio1_c.dir
+C:/Users/ASUS/Documents/POLI/MAGISTRALE/I ANNO/PROGRAMMAZIONE DI SISTEMA/Programmazione/Laboratori/Lab2/esercizio1_c/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ASUS/Documents/POLI/MAGISTRALE/I ANNO/PROGRAMMAZIONE DI SISTEMA/Programmazione/Laboratori/Lab2/esercizio1_c/cmake-build-debug/CMakeFiles/rebuild_cache.dir
