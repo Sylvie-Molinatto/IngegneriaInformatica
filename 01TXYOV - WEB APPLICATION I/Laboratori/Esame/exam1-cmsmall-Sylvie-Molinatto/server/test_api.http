@@ -1,0 +1,120 @@
+# This file could be used for testing the API with Visual Studio Code
+
+## Execute Log In
+POST http://localhost:3001/api/sessions HTTP/1.1
+content-type: application/json
+
+{
+    "username": "Rachel.Gray@gmail.com",
+    "password": "password"
+}
+###
+
+## Checking if user is still logged-in.
+GET http://localhost:3001/api/sessions/current HTTP/1.1
+###
+
+## Execute Log Out.
+DELETE http://localhost:3001/api/sessions/current HTTP/1.1
+###
+
+## Retrieving all the published pages.
+GET http://localhost:3001/api/publishedPages HTTP/1.1
+###
+
+## Retrieving all the pages.
+GET http://localhost:3001/api/pages HTTP/1.1
+###
+
+## Retrieving a specific page specifing its ID.
+GET http://localhost:3001/api/pages/1 HTTP/1.1
+###
+
+## Retrieving page blocks specifing the page ID.
+GET http://localhost:3001/api/pages/3/blocks HTTP/1.1
+###
+
+## Retrieving page blocks specifing the page ID.
+GET http://localhost:3001/api/pages/1/blocks/1 HTTP/1.1
+###
+
+## Retrieve user informations specifing its ID
+GET http://localhost:3001/api/users/1 HTTP/1.1
+###
+
+## Retrieve website name
+GET http://localhost:3001/api/website-name HTTP/1.1
+###
+
+## Create a new page
+POST http://localhost:3001/api/pages HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Bees",
+    "author": 1,
+    "creationDate": "2023-06-13",
+    "publicationDate": "2023-06-18"
+}
+###
+
+## Create a new block for the page
+POST http://localhost:3001/api/pages/3/block HTTP/1.1
+content-type: application/json
+
+{
+    "type": "image",
+    "content": "bee.jpg",
+    "position": 1
+}
+###
+
+## Update an existing page
+PUT http://localhost:3001/api/pages/4 HTTP/1.1
+content-type: application/json
+
+{
+    "pageid": 4,
+    "title": "Butterfly",
+    "author": 1,
+    "creationDate": "2023-06-14",
+    "publicationDate": "2023-06-14"
+}
+###
+
+## Update an existing page block
+PUT http://localhost:3001/api/pages/4/blocks/9 HTTP/1.1
+content-type: application/json
+
+{
+    "pageid": 4,
+    "blockid": 9,
+    "content": "Butterfly - Image",
+    "position": 1
+}
+###
+
+## Delete page block
+DELETE http://localhost:3001/api/pages/5/blocks/14 HTTP/1.1
+###
+
+## Delete page blocks
+DELETE http://localhost:3001/api/pages/4/blocks HTTP/1.1
+###
+
+## Delete page
+DELETE  http://localhost:3001/api/pages/4 HTTP/1.1
+###
+
+## Get users
+GET  http://localhost:3001/api/users HTTP/1.1
+###
+
+## Update Website Name
+PUT http://localhost:3001/api/website-name HTTP/1.1
+content-type: application/json
+
+{
+    "name": "CMS"
+}
+###
