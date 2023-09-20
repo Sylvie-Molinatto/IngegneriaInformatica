@@ -1,0 +1,1 @@
+C:\Users\ASUS\Documents\POLI\MAGISTRALE\I\ ANNO\PROGRAMMAZIONE\ DI\ SISTEMA\Programmazione\Laboratori\Lab1\capitalize\target\debug\capitalize.exe: C:\Users\ASUS\Documents\POLI\MAGISTRALE\I\ ANNO\PROGRAMMAZIONE\ DI\ SISTEMA\Programmazione\Laboratori\Lab1\capitalize\src\main.rs

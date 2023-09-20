@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/Exercism/rust/luhn/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Exercism/rust/luhn/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/luhn/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/luhn/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/luhn_adv/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/minesweeper/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/minesweeper/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/minesweeper_add/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/Exercism/rust/luhn/target" />
+      <excludeFolder url="file://$MODULE_DIR$/luhn/target" />
+      <excludeFolder url="file://$MODULE_DIR$/luhn_adv/target" />
+      <excludeFolder url="file://$MODULE_DIR$/minesweeper/target" />
+      <excludeFolder url="file://$MODULE_DIR$/minesweeper_add/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
