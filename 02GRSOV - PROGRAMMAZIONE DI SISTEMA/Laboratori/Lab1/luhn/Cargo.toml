@@ -1,0 +1,11 @@
+[package]
+edition = "2021"
+name = "luhn"
+version = "1.6.1"
+
+[lib]
+name = "luhn"
+path = "src/lib.rs"
+
+[dependencies]
+clap = { version = "4.1.11", features = ["derive"] }
