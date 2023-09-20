@@ -1,9 +1,0 @@
-C:\Users\ASUS\Documents\POLI\MAGISTRALE\I ANNO\PROGRAMMAZIONE DI SISTEMA\Programmazione\Laboratori\Lab2\es1\target\debug\deps\anstyle_parse-8f1d711c7ef4ea1a.rmeta: C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\lib.rs C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\params.rs C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\state\mod.rs C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\state\definitions.rs C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\state\table.rs
-
-C:\Users\ASUS\Documents\POLI\MAGISTRALE\I ANNO\PROGRAMMAZIONE DI SISTEMA\Programmazione\Laboratori\Lab2\es1\target\debug\deps\anstyle_parse-8f1d711c7ef4ea1a.d: C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\lib.rs C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\params.rs C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\state\mod.rs C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\state\definitions.rs C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\state\table.rs
-
-C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\lib.rs:
-C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\params.rs:
-C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\state\mod.rs:
-C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\state\definitions.rs:
-C:\Users\ASUS\.cargo\registry\src\github.com-1ecc6299db9ec823\anstyle-parse-0.2.0\src\state\table.rs:

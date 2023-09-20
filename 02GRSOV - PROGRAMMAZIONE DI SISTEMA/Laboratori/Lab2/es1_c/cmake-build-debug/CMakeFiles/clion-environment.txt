@@ -1,4 +1,0 @@
-ToolSet: w64 11.0 (local)@C:\Users\ASUS\Downloads\x86_64-12.1.0-release-posix-sjlj-rt_v10-rev3\mingw64
-Options: 
-
-Options:-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2022.3.2/bin/ninja/win/x64/ninja.exe
