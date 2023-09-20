@@ -1,0 +1,23 @@
+{
+  "name": "lab01-node",
+  "version": "1.0.0",
+  "description": "Proposed solution of Lab #1: Getting started with Node.js ",
+  "main": "lab01-ex2.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polito-WA1-AW1/lab01-node.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/polito-WA1-AW1/lab01-node/issues"
+  },
+  "homepage": "https://github.com/polito-WA1-AW1/lab01-node#readme",
+  "dependencies": {
+    "dayjs": "^1.11.7"
+  }
+}

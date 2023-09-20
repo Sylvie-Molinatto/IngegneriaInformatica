@@ -1,0 +1,28 @@
+#button{
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+.pt-3{
+  height: 100vh !important;
+}
+
+#container-wrapper{
+  background-color: "white";
+  width:fit-content;
+
+}
+
+@media (min-width: 992px) { 
+  .p-5{
+    width: 30vw;
+  }
+ 
+ }
+ #float-container{
+  margin-top: 80px !important;
+}
+#row-create{
+  padding-bottom: 1rem;
+}

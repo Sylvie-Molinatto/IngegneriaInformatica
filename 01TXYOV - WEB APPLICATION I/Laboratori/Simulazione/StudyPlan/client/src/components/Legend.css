@@ -1,0 +1,14 @@
+.bi-chevron-double-left {
+    transition: all 0.1s ease;
+    vertical-align: middle;
+ }
+div[aria-expanded="true"] .bi-chevron-double-left {
+  transform: rotate(180deg);
+}
+#wrapper{
+    display: flex;
+    justify-content: flex-end;
+}
+#mySidepanel{
+    position: relative;
+}

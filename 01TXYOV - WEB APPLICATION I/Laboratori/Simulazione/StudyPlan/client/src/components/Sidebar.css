@@ -1,0 +1,36 @@
+
+  #left-container{
+    padding: 0rem;
+    background-color: #f9fafb;
+    height: 100%;
+    position: relative;
+    box-shadow: 0 0 10px #d8d3d3;
+    padding-bottom: 1rem;
+  }
+
+  #left-container .container-fluid{
+     padding: 0rem;
+  }
+  @media (max-width: 768px) { 
+    .position-lg-relative{
+      position: relative !important;
+    }
+    #left-container {
+      padding: 1rem;
+      margin-top: -14px;
+      margin-left: -13px;
+      position: fixed !important;
+      z-index: 2;
+   }
+  }
+  .rounded-corners {
+    border-radius: 10px;
+    text-align: left;
+    width: 80%;
+    border-bottom: 1px #ccc solid;
+    padding: .5rem 1rem;
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+
+  

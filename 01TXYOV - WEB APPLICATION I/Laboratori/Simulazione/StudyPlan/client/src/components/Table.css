@@ -1,0 +1,37 @@
+.bi-chevron-up {
+    transition: all 0.2s ease;
+    vertical-align: middle;
+ }
+div[aria-expanded="false"] .bi-chevron-up {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 992px){
+  #wrapper, #wrapper2{
+    padding: 0rem;
+  }
+  .table > :not(caption) > * > *{
+    padding: 0rem;
+  }
+  
+}
+
+#wrapper, #wrapper2 {
+  min-width: fit-content;
+}
+
+#header-fixed {
+  position: sticky;
+  top: 60px;
+  background-color: white;
+  z-index: 1;
+}
+
+#header-fixed > tr > th {
+  vertical-align : middle;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+#Card-wrapper{
+  width: 100%;
+}

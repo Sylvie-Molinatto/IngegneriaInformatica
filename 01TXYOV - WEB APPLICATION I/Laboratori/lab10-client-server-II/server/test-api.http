@@ -1,0 +1,158 @@
+# This file could be used for testing the API with Visual Studio Code
+
+## Retrieving all the films.
+GET http://localhost:3001/api/films HTTP/1.1
+###
+
+## Retrieving a specific film specifing its ID.
+GET http://localhost:3001/api/films/{{$randomInt 1 6}} HTTP/1.1
+###
+
+
+## Retrieving all the films with a specified filter (in this example "unseen").
+GET http://localhost:3001/api/films?filter=filter-unseen HTTP/1.1
+###
+
+## Create new film (without filmid)
+POST http://localhost:3001/api/films HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Guardians of the Galaxy Vol.3",
+    "favorite": 1,
+    "watchDate": "{{$datetime 'YYYY-MM-DD' -15 d }}",
+    "rating": 4,
+    "user": 1
+}
+###
+
+## Retrieving all the films with a specified filter.
+GET http://localhost:3001/api/films?filter=filter-lastmonth HTTP/1.1
+###
+
+
+
+## Updates the first film.
+PUT http://localhost:3001/api/films/1 HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "title": "The Hangover",
+    "favorite": 0,
+    "watchDate": "",
+    "rating": 0,
+    "user": 1
+}
+###
+
+
+## Updates film favorite property.
+PUT http://localhost:3001/api/films/1/favorite HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "favorite": 1
+}
+###
+
+## Updates film rating property.
+PUT http://localhost:3001/api/films/1/rating HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "rating": {{$randomInt 0 6}}
+}
+###
+
+## Create new film (with missing optional propertues)
+POST http://localhost:3001/api/films HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Seven",
+    "user": 1
+}
+###
+
+## Deletes film.
+DELETE http://localhost:3001/api/films/1 HTTP/1.1
+###
+
+
+## Retrieving all the films.
+GET http://localhost:3001/api/films HTTP/1.1
+###
+
+
+
+# Wrong Requests
+
+## Trying to retrieve a film with an ID that does not exist.
+GET http://localhost:3001/api/films/1000 HTTP/1.1
+###
+
+## Trying to retrieve a film with a wrong ID.
+GET http://localhost:3001/api/films/ThisIsAStringId HTTP/1.1
+###
+
+## Trying to create a wrong film.
+POST http://localhost:3001/api/films HTTP/1.1
+content-type: application/json
+
+{
+    "wrong_title_field": "Guardians of the Galaxy Vol.3",
+    "favorite": "I really liked it!",
+    "watchDate": "May the 15th, 2023",
+    "rating": 35
+}
+###
+
+## Trying to update a film with wrong values.
+PUT http://localhost:3001/api/films/1 HTTP/1.1
+content-type: application/json
+
+{
+    "id": 2,
+    "title": "The Hangover",
+    "favorite": 7,
+    "watchDate": "",
+    "rating": 7
+}
+###
+
+## Trying to updates film favorite property with a wrong value.
+PUT http://localhost:3001/api/films/1/favorite HTTP/1.1
+content-type: application/json
+
+{
+    "id": 2,
+    "favorite": "Really like it!"
+}
+###
+
+## Trying to update film rating property with a wrong value.
+PUT http://localhost:3001/api/films/1/rating HTTP/1.1
+content-type: application/json
+
+{
+    "id": 2,
+    "rating": 50
+}
+###
+
+## Updates film with and id that does not exists
+PUT http://localhost:3001/api/films/999 HTTP/1.1
+content-type: application/json
+
+{
+    "id": 999,
+    "title": "The Hangover",
+    "favorite": 0,
+    "watchDate": "",
+    "rating": 0,
+    "user": 1
+}
+###
