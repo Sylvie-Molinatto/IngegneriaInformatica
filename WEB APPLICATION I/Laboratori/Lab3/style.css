@@ -1,0 +1,30 @@
+/* Create two different columns that floats next to each other */
+.column1 {
+    float: left;
+    width: 33%;
+    padding: 10px;
+  }
+.column2 {
+    float: left;
+    width: 66%;
+    padding: 10px;
+}
+
+td.favorite{
+    color: red;
+}
+
+footer{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.fixed-right-bottom {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: 1030;
+    margin: 0 1.5rem 1.5rem 0;
+    border-radius: 50%;
+}
