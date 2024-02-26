@@ -1,0 +1,35 @@
+{
+    // Usare IntelliSense per informazioni sui possibili attributi.
+    // Al passaggio del mouse vengono visualizzate le descrizioni degli attributi esistenti.
+    // Per altre informazioni, visitare: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "DriverBigData",
+            "request": "launch",
+            "mainClass": "it.polito.bigdata.hadoop.exercise1.DriverBigData",
+            "projectName": "Exam2018_06_26_Exercise1"
+        },
+        {
+            "type": "java",
+            "name": "SparkDriver",
+            "request": "launch",
+            "mainClass": "it.polito.bigdata.spark.exercise2.SparkDriver",
+            "projectName": "Exam2018_06_26_Exercise2"
+        },
+        {
+            "type": "java",
+            "name": "DriverBigData(1)",
+            "request": "launch",
+            "mainClass": "it.polito.bigdata.hadoop.lab.DriverBigData",
+            "projectName": "Lab4"
+        }
+    ]
+}

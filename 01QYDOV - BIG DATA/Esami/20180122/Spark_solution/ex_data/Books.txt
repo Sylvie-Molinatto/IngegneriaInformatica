@@ -1,0 +1,5 @@
+B1020,The Body in the Library,Crime,Dodd and Company,1942
+B1021,Title2,Crime,Dodd and Company,1943
+B1022,Title3,Adventure,Publisher1,1978
+B1023,Title4,Adventure,Publisher2,1975
+B1024,Title5,Adventure,Publisher1,1976
