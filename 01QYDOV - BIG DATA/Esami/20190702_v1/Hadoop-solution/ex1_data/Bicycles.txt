@@ -1,0 +1,7 @@
+BID13,BianchiCompany,Turin,Italy
+BID14,BianchiCompany,Turin,Italy
+BID15,BianchiCompany,Turin,Italy
+BID27,RossiCompany,Milan,Italy
+BID28,RossiCompany,Milan,Italy
+BID26,BianchiCompany,Milan,Italy
+BID30,BianchiCompany,Paris,France

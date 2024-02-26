@@ -1,0 +1,7 @@
+SID13,PentiumV,DC10,Barcelona,Spain
+SID14,PentiumV,DC10,Barcelona,Spain
+sID15,PentiumV,DC10,Barcelona,Spain
+SID27,8086,DC20,Madrid,Spain
+SID28,8086,DC20,Madrid,Spain
+SID26,PentiumV,DC20,Madrid,Spain
+SID30,PentiumV,DC30,Paris,France
