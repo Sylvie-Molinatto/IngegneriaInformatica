@@ -1,7 +1,6 @@
 package it.polito.bigdata.spark.example;
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public class DayOfWeekHourCriticality implements Serializable{
     
     public String dayOfWeek;
