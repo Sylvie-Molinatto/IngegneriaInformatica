@@ -1,0 +1,36 @@
+For each line of the input file there is:
+- ProductId array[1]
+- UserId array[2]
+- Score array[6]
+
+First job
+
+Mapper:
+  Input: FileInputFormat
+  Output key type:
+  Output value type:
+  Emit
+
+Reducer
+
+
+
+Example:
+
+product1, user1, 5
+product1, user2, 3
+product2, user1, 1
+product3, user2, 4
+product5, user1, 0
+
+First job: calculate the avg per user
+
+Map output:
+user1, [5,1,0]
+user2, [3, 4] 
+
+Reduce output
+user1, 2
+user2, 3.5
+
+Second job:
