@@ -1,0 +1,5 @@
+book1,Title1,Author1,25.19
+book3,Title3,Author1,45.19
+book4,Title4,Author2,5.19
+book5,Title5,Author3,5.99
+book6,Title6,Author1,60.19

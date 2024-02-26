@@ -1,0 +1,7 @@
+station1,Politecnico,ZoneA,Turin,30
+station2,Politecnico,ZoneA,Turin,25
+station3,Politecnico,ZoneA,Turin,4
+station4,Politecnico,ZoneB,Turin,15
+station5,Politecnico,ZoneC,Turin,3
+station6,Politecnico,ZoneA,Milan,25
+station7,Politecnico,ZoneC,Turin,2
