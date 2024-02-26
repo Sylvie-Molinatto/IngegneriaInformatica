@@ -1,0 +1,5 @@
+TRN,Torino Caselle,Caselle Torinese,Italy
+JFK,John F. Kennedy International Airport,New York City,USA
+CDG,Charles de Gaulle,Paris,France
+MUC,Munich Airport,Munich,Germany
+FRA,Frankfurt Airport,Frankfurt,Germany
