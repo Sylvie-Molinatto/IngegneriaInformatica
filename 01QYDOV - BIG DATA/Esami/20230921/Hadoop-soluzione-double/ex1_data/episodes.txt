@@ -1,0 +1,20 @@
+SID15,1,1,Pilot,1994/09/22
+SID15,1,2,The One with the Sonogram at the End,1994/09/29
+SID15,1,3,The One with the Thumb,1994/10/06
+SID15,1,4,The One with George Stephanopoulos,1994/10/13
+SID15,1,5,The One with the East German Laundry Detergent,1994/10/20
+SID15,1,6,The One with the Butt,1994/10/27
+SID15,1,7,The One with the Blackout,1994/11/03
+SID15,1,8,The One Where Nana Dies Twice,1994/11/10
+SID15,1,9,The One Where Underdog Gets Away,1994/11/17
+SID15,1,10,The One with the Monkey,1994/12/15
+SID15,2,1,The One with Ross's New Girlfriend,1995/09/21
+SID15,2,2,The One with the Breast Milk,1995/09/28
+SID15,2,3,The One Where Heckles Dies,1995/10/05
+SID15,2,4,The One with Phoebe's Husband,1995/10/12
+SID15,2,5,The One with Five Steaks and an Eggplant,1995/10/19
+SID15,2,6,The One with the Baby on the Bus,1995/11/02
+SID15,2,7,The One Where Ross Finds Out,1995/11/09
+SID15,2,8,The One with the List,1995/11/16
+SID15,2,9,The One with Phoebe's Dad,1995/12/14
+SID15,2,10,The One with Russ,1996/01/04

@@ -1,0 +1,3 @@
+ID1,t-shirt-winter,Clothing,2001/03/01-12:00:00
+ID2,jeans-regular,Clothing,2002/05/15-09:30:00
+ID3,sneakers-sports,Footwear,2021/08/22-16:45:00

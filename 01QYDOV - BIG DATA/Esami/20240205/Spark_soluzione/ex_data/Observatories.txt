@@ -1,0 +1,6 @@
+OB12,Galileo Observatory,41.9028,12.4964,Italy,Europe,False
+OB222,Ass. Osservazioni Palazzo Madama,31.9028,22.4964,Italy,Europe,True
+OB22,Kepler Space Observatory,41.0243,62.4964,Netherlands,Europe,False
+OB122,ESA Spanish Observatory,41.0213,62.4964,Spain,Europe,False
+OB221,Sydney Observatory,-23.34343,-34.4,Australia,Oceania,False
+OB221,Japan amateur association,23.5445,2.3423,Japan,Asia,True

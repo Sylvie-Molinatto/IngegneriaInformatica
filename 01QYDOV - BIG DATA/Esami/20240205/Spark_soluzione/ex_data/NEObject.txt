@@ -1,0 +1,6 @@
+NEO1,1,2,True
+NEO2,7,7,False
+NEO3,6,5,False
+NEO4,2,2,False
+NEO5,6,3,False
+NEO6,7,9,False

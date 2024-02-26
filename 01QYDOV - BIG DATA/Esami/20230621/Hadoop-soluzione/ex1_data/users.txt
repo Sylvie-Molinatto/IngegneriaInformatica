@@ -1,0 +1,4 @@
+User1000,Mario,Rossi,1988/06/01,Business
+User1001,Luigi,Verdi,1990/03/15,Free
+User1002,Sara,Bianchi,1985/12/28,Business
+User1003,Alice,Neri,1995/08/10,Free

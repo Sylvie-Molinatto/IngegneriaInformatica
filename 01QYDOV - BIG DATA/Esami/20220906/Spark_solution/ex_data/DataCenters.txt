@@ -1,0 +1,10 @@
+DC1,C2,Nice,France,Europe
+DC2,C2,Nice,France,Europe
+DC3,C2,Rome,Italy,Europe
+DC4,C3,Milan,Italy,Europe
+DC5,C3,Milan,Italy,Europe
+DC6,C3,Atlanta,USA,America
+DC7,C3,Atlanta,USA,America
+DC8,C1,Atlanta,USA,America
+DC9,C1,Buenos Aires,Argentina,America
+DC10,C1,Buenos Aires,Argentina,America

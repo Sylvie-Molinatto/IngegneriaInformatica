@@ -1,0 +1,6 @@
+MID1034,Polito project kick-off,2023/02/07-20:40:00,90,User1000
+MID1035,Marketing Strategy Meeting,2023/02/10-09:00:00,60,User1002
+MID1036,Team Building Workshop,2023/02/15-14:30:00,120,User1001
+MID1037,Product Development Brainstorm,2023/02/20-13:00:00,90,User1003
+MID1001,Exploring data quality, 2023/02/27-14:30:00,50,User1000
+MID1002,Cubersecurity,2023/03/15-08:30:00,120,User1002

@@ -1,0 +1,24 @@
+S1,Ubuntu2,HPProLiantDL380
+S2,Ubuntu2,DellPowerEdgeR740
+S3,Ubuntu2,IBMSystem x3650
+S4,Ubuntu2,HPProLiantDL360
+S5,Ubuntu2,DellPowerEdgeR640
+S6,Ubuntu2,IBMSystem x3550
+S7,WindowsServer2019,HPProLiantDL380
+S8,WindowsServer2019,DellPowerEdgeR740
+S9,WindowsServer2019,IBMSystem x3650
+S10,WindowsServer2019,HPProLiantDL360
+S11,WindowsServer2019,DellPowerEdgeR640
+S12,WindowsServer2019,IBMSystem x3550
+S13,CentOS8,HPProLiantDL380
+S14,CentOS8,DellPowerEdgeR740
+S15,CentOS8,IBMSystem x3650
+S16,CentOS8,HPProLiantDL360
+S17,CentOS8,DellPowerEdgeR640
+S18,CentOS8,IBMSystem x3550
+S19,WindowsServer2022,HPProLiantDL380
+S20,WindowsServer2022,DellPowerEdgeR740
+S21,WindowsServer2022,IBMSystem x3650
+S22,WindowsServer2022,HPProLiantDL360
+S23,WindowsServer2022,DellPowerEdgeR640
+S24,WindowsServer2022,IBMSystem x3550
