@@ -1,0 +1,4 @@
+it/polito/bigdata/spark/example/CountTotReadingsTotFull.class
+it/polito/bigdata/spark/example/SparkDriver.class
+it/polito/bigdata/spark/example/DayOfWeekHourCrit.class
+it/polito/bigdata/spark/example/DateTool.class
