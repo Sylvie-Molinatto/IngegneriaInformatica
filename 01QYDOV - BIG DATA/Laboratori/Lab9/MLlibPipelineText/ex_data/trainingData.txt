@@ -1,0 +1,4 @@
+1,The Spark system is based on scala
+1,Spark is a new distributed system
+0,Turin is a beautiful city
+0,Turin is in the north of Italy 
