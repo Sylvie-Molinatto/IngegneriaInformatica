@@ -8,8 +8,6 @@ import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineModel;
 import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.DecisionTreeClassifier;
-import org.apache.spark.ml.classification.LogisticRegression;
-import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.ml.linalg.Vectors;
 import org.apache.spark.mllib.evaluation.MulticlassMetrics;
 import org.apache.spark.mllib.linalg.Matrix;
@@ -17,7 +15,6 @@ import org.apache.spark.ml.feature.LabeledPoint;
 
 public class SparkDriver {
 
-	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 
 		String inputPath;
