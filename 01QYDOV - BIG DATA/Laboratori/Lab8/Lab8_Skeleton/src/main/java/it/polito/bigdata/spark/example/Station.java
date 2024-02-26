@@ -1,6 +1,5 @@
 package it.polito.bigdata.spark.example;
 
-@SuppressWarnings("serial")
 public class Station implements java.io.Serializable{
     
     private int id;

@@ -2,7 +2,6 @@ package it.polito.bigdata.spark.example;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public class StationDayHourCriticality implements Serializable{
 
     private int station;

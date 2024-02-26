@@ -3,7 +3,6 @@ package it.polito.bigdata.spark.example;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-@SuppressWarnings("serial")
 public class Reading implements Serializable{
 
     private int station;

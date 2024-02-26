@@ -2,7 +2,6 @@ package it.polito.bigdata.spark.sparkmllib;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public class LabeledDocument implements Serializable {
 	  private double label;
 	  private String text;
